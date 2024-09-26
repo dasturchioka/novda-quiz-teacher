@@ -73,12 +73,9 @@ const handleImage = (e: any) => {
 
 <template>
 	<div
-		class="add-questions-page container mx-auto sm:px-4 px-2 flex h-screen items-center justify-center relative"
+		class="add-questions-page container mx-auto sm:px-4 px-2 flex h-screen flex-col"
 	>
-		<Button class="absolute left-4 top-4" @click="restart" variant="destructive"
-			><Trash class="w-4 h-4 mr-2" /> Restart</Button
-		>
-		<form @submit.prevent="addQuestion">
+		<form @submit.prevent="addQuestion" class="sm:mt-10 mt-6">
 			<h1 class="text-2xl font-semibold mb-4 text-center">
 				<b>{{ packageName }}</b> to'plami uchun savollar tuzish
 			</h1>
@@ -119,6 +116,9 @@ const handleImage = (e: any) => {
 				</div>
 				<Button :disabled="loading" type="submit" class="py-6"
 					><Send class="w-4 h-4 mr-2" /> Jo'natish</Button
+				>
+				<Button :disabled="loading" type="button" class="py-6" @click="restart" variant="destructive"
+					><Trash class="w-4 h-4 mr-2" /> Restart</Button
 				>
 			</div>
 		</form>

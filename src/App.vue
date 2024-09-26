@@ -4,7 +4,7 @@ import { Toaster } from 'vue-sonner'
 </script>
 
 <template>
-	<div class="app h-screen">
+	<div class="app min-h-screen">
 		<Toaster position="top-center" />
 		<RouterView></RouterView>
 	</div>
