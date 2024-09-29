@@ -4,25 +4,9 @@ import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import axios from 'axios'
 import { ref } from 'vue'
+import { Question } from '@/models'
 
-export interface Question {
-	question: string
-	answer: string
-	optionA: string
-	optionB: string
-	optionC: string
-	optionD: string
-	img?: File // for now, then it will be => string (file url)
-	packageName: string
-	packageOneId: string
-}
 
-export interface Package {
-	name: string
-	oneId: string
-	teacherId?: string
-	questions?: Question[]
-}
 
 export const useQuestionPackage = defineStore('question-package-store', () => {
 	const router = useRouter()
