@@ -20,7 +20,39 @@ const routes: RouteRecordRaw[] = [
 			{
 				name: 'default-groups',
 				path: 'groups',
-				component: () => import('@/pages/groups-page.vue'),
+				component: () => import('@/pages/groups/groups-page.vue'),
+				meta: {
+					layout: 'default',
+				},
+			},
+			{
+				name: 'default-students',
+				path: 'students',
+				component: () => import('@/pages/students/students-page.vue'),
+				meta: {
+					layout: 'default',
+				},
+			},
+			{
+				name: 'default-packages',
+				path: 'packages',
+				component: () => import('@/pages/packages/packages-page.vue'),
+				meta: {
+					layout: 'default',
+				},
+			},
+			{
+				name: 'default-exams',
+				path: 'exams',
+				component: () => import('@/pages/exams/exams-page.vue'),
+				meta: {
+					layout: 'default',
+				},
+			},
+			{
+				name: 'default-community',
+				path: 'community',
+				component: () => import('@/pages/community/community-page.vue'),
 				meta: {
 					layout: 'default',
 				},

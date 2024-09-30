@@ -1,8 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { MenuIcon, XIcon, UsersRound, Boxes, CircleDashed, ListCheck, Globe } from 'lucide-vue-next'
+import {
+	MenuIcon,
+	XIcon,
+	UsersRound,
+	Boxes,
+	CircleDashed,
+	ListCheck,
+	Globe,
+	X,
+} from 'lucide-vue-next'
 import { useAuth } from '@/stores/auth'
+import Cookies from 'js-cookie'
+
+const visibilityBetaComponent = ref(Cookies.get('beta-component'))
 
 const authStore = useAuth()
 
@@ -15,9 +27,11 @@ const navItems = [
 ]
 
 const route = useRoute()
-const currentPath = ref(route.path)
 const sidebarOpen = ref(false)
 const isMobile = ref(false)
+const currentPath = computed(() => {
+	return route.path
+})
 
 const checkMobile = () => {
 	isMobile.value = window.innerWidth <= 768
@@ -28,6 +42,11 @@ const checkMobile = () => {
 
 const toggleSidebar = () => {
 	sidebarOpen.value = !sidebarOpen.value
+}
+
+const closeBetaComponent = () => {
+	Cookies.set('beta-component', 'false')
+	visibilityBetaComponent.value = Cookies.get('beta-component')
 }
 
 onMounted(() => {
@@ -45,7 +64,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="flex h-screen bg-background">
+	<div class="flex h-screen bg-background overflow-x-hidden w-full">
 		<!-- Sidebar -->
 		<aside
 			:class="[
@@ -53,36 +72,51 @@ onUnmounted(() => {
 				sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
 			]"
 		>
-			<div class="flex h-full flex-col">
-				<div class="flex h-14 items-center border-b px-4">
-					<h1 class="font-bold tracking-tighter font-manrope text-2xl">
-						Teacher <b class="text-blue-500">.</b>
-					</h1>
-					<button
-						v-if="isMobile"
-						@click="toggleSidebar"
-						class="ml-auto rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground md:hidden"
-					>
-						<XIcon class="h-4 w-4" />
-					</button>
+			<div class="flex h-full flex-col justify-between">
+				<div class="first-part">
+					<div class="flex h-14 items-center border-b px-4">
+						<h1 class="font-bold tracking-tighter font-manrope text-2xl">
+							Teacher <b class="text-blue-500">.</b>
+						</h1>
+						<button
+							v-if="isMobile"
+							@click="toggleSidebar"
+							class="ml-auto rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground md:hidden"
+						>
+							<XIcon class="h-4 w-4" />
+						</button>
+					</div>
+					<nav class="flex-1 space-y-2 overflow-y-auto p-2 h-auto max-h-[400px]">
+						<RouterLink
+							v-for="item in navItems"
+							:to="item.href"
+							:key="item.href"
+							:href="item.href"
+							:class="[
+								'flex items-center rounded-md px-3 py-2 font-medium transition-colors font-noto',
+								currentPath === item.href
+									? 'bg-blue-500 text-neutral-50 hover:text-neutral-50 hover:bg-blue-500'
+									: 'text-neutral-900 dark:hover:bg-neutral-800 hover:bg-neutral-200',
+							]"
+						>
+							<component :is="item.icon" class="mr-2 h-4 w-4" />
+							{{ item.label }}
+						</RouterLink>
+					</nav>
 				</div>
-				<nav class="flex-1 space-y-2 overflow-y-auto p-2">
-					<RouterLink
-						v-for="item in navItems"
-						:to="item.href"
-						:key="item.href"
-						:href="item.href"
-						:class="[
-							'flex items-center rounded-md px-3 py-2 font-medium transition-colors font-noto',
-							currentPath === item.href
-								? 'bg-blue-500 text-neutral-50 hover:text-neutral-50 hover:bg-blue-500'
-								: 'text-neutral-900 dark:hover:bg-neutral-800 hover:bg-neutral-200',
-						]"
-					>
-						<component :is="item.icon" class="mr-2 h-4 w-4" />
-						{{ item.label }}
-					</RouterLink>
-				</nav>
+				<div
+					v-if="visibilityBetaComponent === 'true'"
+					class="beta bg-blue-700 text-neutral-50 mx-2 rounded-md p-4 justify-self-end mb-4"
+				>
+					<h1 class="text-xl flex items-center font-bold font-manrope mb-4">
+						Sayt beta holatda!
+						<button @click="closeBetaComponent"><X class="size-5 ml-2" /></button>
+					</h1>
+					<p class="text-sm font-noto">
+						Saytga yangi imkoniyat va qulayliklar qo'shiladi va texnik muammolar tez orada hal
+						qilinadi
+					</p>
+				</div>
 			</div>
 		</aside>
 
@@ -99,7 +133,7 @@ onUnmounted(() => {
 			</header>
 
 			<!-- Scrollable main content -->
-			<main class="flex-1 overflow-y-auto">
+			<main class="flex-1 overflow-y-auto overflow-x-hidden">
 				<div class="container mx-auto py-6">
 					<RouterView></RouterView>
 				</div>
@@ -107,3 +141,8 @@ onUnmounted(() => {
 		</div>
 	</div>
 </template>
+
+<style scoped>
+.router-link-active.router-link-exact-active {
+}
+</style>

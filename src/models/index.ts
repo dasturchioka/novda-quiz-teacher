@@ -8,20 +8,30 @@ export interface Teacher {
 }
 
 export interface Question {
-	question: string
-	answer: string
+	id: string
+	questionText: string
 	optionA: string
 	optionB: string
 	optionC: string
 	optionD: string
-	img?: File // for now, then it will be => string (file url)
-	packageName: string
-	packageOneId: string
+	answer: string
+	img?: string
+	package?: Package
+	packageId?: string
 }
 
 export interface Package {
-	name: string
+	id: string
 	oneId: string
-	teacherId?: string
-	questions?: Question[]
+	name: string
+	status: StatusPackage
+	teacher: Teacher
+	questions: Question[]
+	teacherId: string
+	[key: string]: any
+}
+
+export enum StatusPackage {
+	Private,
+	Public,
 }

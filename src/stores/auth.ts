@@ -21,6 +21,7 @@ export const useAuth = defineStore('auth-store', () => {
 
 			Cookies.set('token', response.data.token)
 			Cookies.set('oneId', response.data.teacher.oneId)
+			Cookies.set('beta-component', "true")
 			teacherInfo.value = response.data.teacher
 			toast(response.data.msg)
 			await router.push('/')
@@ -45,6 +46,7 @@ export const useAuth = defineStore('auth-store', () => {
 
 			Cookies.set('token', response.data.token)
 			Cookies.set('oneId', response.data.teacher.oneId)
+			Cookies.set('beta-component', "true")
 			teacherInfo.value = response.data.teacher
 			toast(response.data.msg)
 			await router.push('/')
@@ -67,6 +69,7 @@ export const useAuth = defineStore('auth-store', () => {
 				await router.push('/auth')
 				Cookies.remove('token')
 				Cookies.remove('oneId')
+				Cookies.remove('beta-component')
 				toast('Boshqatdan tizimga kiring')
 				return
 			}
@@ -85,6 +88,7 @@ export const useAuth = defineStore('auth-store', () => {
 				await router.push('/auth')
 				Cookies.remove('token')
 				Cookies.remove('oneId')
+				Cookies.remove('beta-component')
 				return
 			}
 
