@@ -1,5 +1,6 @@
 import { teacherInstance } from '@/http'
 import { Package } from '@/models'
+import Cookies from 'js-cookie'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
@@ -14,7 +15,12 @@ export const usePackage = defineStore('package-store', () => {
 				return
 			}
 
-			const response = await teacherInstance.post('/create-question-package', { name })
+			const oneId = Cookies.get('oneId')
+
+			const response = await teacherInstance.post('/create-question-package', {
+				name,
+				teacherOneId: oneId,
+			})
 
 			if (!response) {
 				toast('Server yoki internet bilan aloqa mavjud emas')
@@ -22,6 +28,7 @@ export const usePackage = defineStore('package-store', () => {
 			}
 
 			packages.value.push(response.data.package)
+			toast(response.data.msg)
 			return
 		} catch (error: any) {
 			toast(

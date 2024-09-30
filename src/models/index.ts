@@ -31,7 +31,4 @@ export interface Package {
 	[key: string]: any
 }
 
-export enum StatusPackage {
-	Private,
-	Public,
-}
+export type StatusPackage = 'Private' | 'Public'
