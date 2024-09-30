@@ -5,12 +5,23 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { EyeIcon, EyeOffIcon } from 'lucide-vue-next'
 import { ref } from 'vue'
+import { useAuth } from '@/stores/auth'
+import { Teacher } from '@/models'
+
+const authStore = useAuth()
 
 const showPassword = ref(false)
 
 const togglePassword = () => {
 	showPassword.value = !showPassword.value
 }
+
+const teacherDetails = ref<Teacher>({
+	fullname: '',
+	id: '',
+	oneId: '',
+	password: '',
+})
 </script>
 
 <template>
@@ -22,15 +33,21 @@ const togglePassword = () => {
 					<TabsTrigger value="login">Login</TabsTrigger>
 				</TabsList>
 				<TabsContent value="register">
-					<form class="space-y-4">
+					<form @submit.prevent="authStore.register(teacherDetails)" class="space-y-4">
 						<div class="space-y-2">
 							<Label for="register-fullname">Ism familiya</Label>
-							<Input id="register-fullname" placeholder="Faqat lotin harflarida" required />
+							<Input
+								v-model:modelValue="teacherDetails.fullname"
+								id="register-fullname"
+								placeholder="Faqat lotin harflarida"
+								required
+							/>
 						</div>
 						<div class="space-y-2">
 							<Label for="register-password">Parol</Label>
 							<div class="relative">
 								<Input
+									v-model:modelValue="teacherDetails.password"
 									id="register-password"
 									:type="[showPassword ? 'text' : 'password']"
 									placeholder="Kamida 8 ta belgi"
@@ -51,16 +68,22 @@ const togglePassword = () => {
 					</form>
 				</TabsContent>
 				<TabsContent value="login">
-					<form @submit.prevent="" class="space-y-4">
+					<form @submit.prevent="authStore.login(teacherDetails)" class="space-y-4">
 						<div class="space-y-2">
 							<Label for="login-oneid">OneId</Label>
-							<Input id="login-oneid" placeholder="Tizim sizga bergan oneId" required />
+							<Input
+								v-model:modelValue="teacherDetails.oneId"
+								id="login-oneid"
+								placeholder="Tizim sizga bergan oneId"
+								required
+							/>
 						</div>
 						<div class="space-y-2">
 							<Label for="login-password">Parol</Label>
 							<div class="relative">
 								<Input
 									id="login-password"
+									v-model:modelValue="teacherDetails.password"
 									:type="[showPassword ? 'text' : 'password']"
 									placeholder="Parolingizni eslang"
 									required

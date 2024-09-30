@@ -2,6 +2,9 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { MenuIcon, XIcon, UsersRound, Boxes, CircleDashed, ListCheck, Globe } from 'lucide-vue-next'
+import { useAuth } from '@/stores/auth'
+
+const authStore = useAuth()
 
 const navItems = [
 	{ href: '/groups', label: 'Guruhlar', icon: Boxes },
@@ -30,6 +33,10 @@ const toggleSidebar = () => {
 onMounted(() => {
 	checkMobile()
 	window.addEventListener('resize', checkMobile)
+})
+
+onMounted(async () => {
+	await authStore.check()
 })
 
 onUnmounted(() => {
@@ -66,10 +73,10 @@ onUnmounted(() => {
 						:key="item.href"
 						:href="item.href"
 						:class="[
-							'flex items-center rounded-md px-3 py-2 font-medium transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-800 font-noto',
+							'flex items-center rounded-md px-3 py-2 font-medium transition-colors font-noto',
 							currentPath === item.href
 								? 'bg-blue-500 text-neutral-50 hover:text-neutral-50 hover:bg-blue-500'
-								: 'text-muted-foreground',
+								: 'text-neutral-900 dark:hover:bg-neutral-800 hover:bg-neutral-200',
 						]"
 					>
 						<component :is="item.icon" class="mr-2 h-4 w-4" />
