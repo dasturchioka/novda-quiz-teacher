@@ -1,58 +1,103 @@
-import { Package } from '@/stores/question-package'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import Cookie from 'js-cookie'
 
+// Define routes
 const routes: RouteRecordRaw[] = [
 	{
 		name: 'default-layout',
 		path: '/',
 		component: () => import('@/layouts/default-layout.vue'),
-		redirect: '/add-package',
+		redirect: '/groups',
+		beforeEnter: (to, from, next) => {
+			const token = Cookie.get('token')
+			if (token) {
+				next() // Proceed to the route
+			} else {
+				next('/auth') // Redirect to the auth page
+			}
+		},
 		children: [
 			{
-				name: 'default-add-question-package',
-				path: 'add-package',
-				component: () => import('@/pages/add-question-package-page.vue'),
-				async beforeEnter(to, from, next) {
-					const existPackage = JSON.parse(
-						localStorage.getItem('question-package') as string
-					) as Package
-
-					if (existPackage) {
-						// Prevent navigation if package exists
-						await router.push(`/add-questions/${existPackage.oneId}`)
-						return next(false)
-					}
-
-					// Allow navigation
-					return next(true)
+				name: 'default-groups',
+				path: 'groups',
+				component: () => import('@/pages/groups/groups-page.vue'),
+				meta: {
+					layout: 'default',
 				},
 			},
 			{
-				name: 'default-add-questions',
-				path: 'add-questions/:id',
-				component: () => import('@/pages/add-questions-page.vue'),
-				async beforeEnter(to, from, next) {
-					const existPackage = JSON.parse(
-						localStorage.getItem('question-package') as string
-					) as Package
-
-					if (existPackage === null || existPackage.oneId !== to.params.id) {
-						// Prevent navigation if package does not exist or ID doesn't match
-						await router.push('/add-package')
-						return next(false)
-					}
-
-					// Allow navigation
-					return next(true)
+				name: 'default-students',
+				path: 'students',
+				component: () => import('@/pages/students/students-page.vue'),
+				meta: {
+					layout: 'default',
+				},
+			},
+			{
+				name: 'default-packages',
+				path: 'packages',
+				component: () => import('@/pages/packages/packages-page.vue'),
+				meta: {
+					layout: 'default',
+				},
+			},
+			{
+				name: 'default-exams',
+				path: 'exams',
+				component: () => import('@/pages/exams/exams-page.vue'),
+				meta: {
+					layout: 'default',
+				},
+			},
+			{
+				name: 'default-community',
+				path: 'community',
+				component: () => import('@/pages/community/community-page.vue'),
+				meta: {
+					layout: 'default',
+				},
+			},
+		],
+	},
+	{
+		name: 'auth-layout',
+		path: '/auth',
+		component: () => import('@/layouts/auth-layout.vue'),
+		beforeEnter: (to, from, next) => {
+			const token = Cookie.get('token')
+			if (!token) {
+				next() // Proceed to the route
+			} else {
+				next('/') // Redirect to the default layout if already authenticated
+			}
+		},
+		children: [
+			{
+				name: 'auth-base',
+				path: '',
+				component: () => import('@/pages/auth-page.vue'),
+				meta: {
+					layout: 'auth',
 				},
 			},
 		],
 	},
 ]
 
+// Create and export router instance
 const router = createRouter({
 	history: createWebHistory(),
 	routes,
+})
+
+// Optional: Add global navigation guard (for demonstration purposes)
+router.beforeEach((to, from, next) => {
+	const token = Cookie.get('token')
+	if (to.path !== '/auth' && !token) {
+		next('/auth') // Redirect to auth if trying to access a protected route
+	} else {
+		next() // Proceed
+	}
 })
 
 export default router
