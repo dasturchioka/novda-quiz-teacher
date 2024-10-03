@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import Header from '@/components/ui/header/Header.vue'
-import CreatePackage from '@/modules/package/create-package.vue'
-import { onMounted } from 'vue'
-import { usePackage } from '@/modules/package/store'
+import CreatePackage from '@/modules/packages/create-package.vue'
+import SinglePackage from '@/modules/packages/single-package.vue'
+import { usePackage } from '@/modules/packages/store'
 import { storeToRefs } from 'pinia'
-import SinglePackage from '@/modules/package/single-package.vue'
-import { Package, StatusPackage, Teacher } from '@/models'
+import { onMounted } from 'vue'
 
 const packageStore = usePackage()
 const { packages } = storeToRefs(packageStore)

@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import Button from '@/components/ui/button/Button.vue'
-import { Trash } from 'lucide-vue-next'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -12,32 +10,25 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { usePackage } from './store'
-import { toRefs } from 'vue'
+import Button from '../ui/button/Button.vue';
 
-const props = defineProps<{ id: string }>()
-
-const { id } = toRefs(props)
-
-const packageStore = usePackage()
+const emit = defineEmits(['do:action'])
 </script>
 
 <template>
 	<div class="delete-package">
 		<AlertDialog>
 			<AlertDialogTrigger as-child>
-				<Button class="w-full" variant="destructive"> <slot name="trigger"></slot> </Button>
+				<slot name="trigger"></slot>
 			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Ishonchingiz komilmi?</AlertDialogTitle>
-					<AlertDialogDescription>
-						Ushbu paketni o'chirib yubormoqchimisiz?
-					</AlertDialogDescription>
+					<AlertDialogDescription> Bu ma'lumotlar qayta tiklanmaydi </AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Yo'q</AlertDialogCancel>
-					<AlertDialogAction @click="">Ha</AlertDialogAction>
+					<AlertDialogAction @click="emit('do:action')">Ha</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

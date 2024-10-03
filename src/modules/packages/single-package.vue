@@ -35,8 +35,13 @@ const { singlePackage } = toRefs(props)
 			{{ singlePackage.name }}
 		</h1>
 		<p class="truncate">
-			<b>{{ singlePackage.questions.length }}</b> ta savol
+			<b>{{ singlePackage.questionCount }}</b> ta savol
 		</p>
-		<Button class="w-full mt-6" variant="outline"><Eye class="size-4 mr-2" /> Ko'rish</Button>
+		<Button
+			@click="$router.push(`/package/${singlePackage.oneId}`)"
+			class="w-full mt-6"
+			variant="outline"
+			><Eye class="size-4 mr-2" /> Ko'rish</Button
+		>
 	</div>
 </template>

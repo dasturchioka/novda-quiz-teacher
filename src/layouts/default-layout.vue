@@ -64,7 +64,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="flex h-screen bg-background overflow-x-hidden w-full">
+	<div class="flex h-screen bg-background overflow-y-hidden overflow-x-hidden w-full">
 		<!-- Sidebar -->
 		<aside
 			:class="[
@@ -134,7 +134,7 @@ onUnmounted(() => {
 
 			<!-- Scrollable main content -->
 			<main class="flex-1 overflow-y-auto overflow-x-hidden">
-				<div class="container mx-auto py-6">
+				<div class="container mx-auto sm:p-4 p-2 w-full">
 					<RouterView></RouterView>
 				</div>
 			</main>

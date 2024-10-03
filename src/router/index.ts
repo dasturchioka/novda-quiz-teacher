@@ -57,6 +57,14 @@ const routes: RouteRecordRaw[] = [
 					layout: 'default',
 				},
 			},
+			{
+				name: 'default-show-package',
+				path: 'package/:oneId',
+				component: () => import('@/pages/packages/show-package-page.vue'),
+				meta: {
+					layout: 'default',
+				},
+			},
 		],
 	},
 	{
