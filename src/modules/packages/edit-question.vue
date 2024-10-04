@@ -105,6 +105,7 @@ watch(
 				<div v-else class="flex-col items-center justify-between">
 					<div class="relative flex justify-center items-center flex-col">
 						<img
+							accept="image/*"
 							v-show="newImg"
 							ref="imgTag"
 							alt="Savol rasmi"
@@ -129,9 +130,13 @@ watch(
 					/>
 				</div>
 
-				<div v-if="showImage && editedQuestionDetails.img" class="space-y-2 flex flex-col items-center justify-center">
+				<div
+					v-if="showImage && editedQuestionDetails.img"
+					class="space-y-2 flex flex-col items-center justify-center"
+				>
 					<a target="_blank" :href="config.SERVER_BASE + editedQuestionDetails.img">
 						<img
+							accept="image/*"
 							ref="imgTag"
 							:src="config.SERVER_BASE + editedQuestionDetails.img"
 							alt="Savol rasmi"
@@ -153,7 +158,7 @@ watch(
 				</div>
 
 				<div class="space-y-2">
-					<label for="questionText" class="text-sm md:text-base font-medium">Question Text</label>
+					<label for="questionText" class="text-sm md:text-base font-medium">Savol matni</label>
 					<Textarea
 						id="questionText"
 						v-model:model-value="editedQuestionDetails.questionText"

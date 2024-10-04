@@ -119,6 +119,43 @@ export const usePackage = defineStore('package-store', () => {
 		}
 	}
 
+	async function editPackage(name: string, packageOneId: string) {
+		try {
+			const response = await teacherInstance.put(`/edit-package/${packageOneId}`, { name })
+
+			if (!response) {
+				toast('Server yoki internet bilan aloqa mavjud emas')
+				return
+			}
+
+			if (response.data.status === 'bad') {
+				toast(response.data.msg)
+				return
+			}
+
+			const data = await response.data
+
+			if (singlePackage.value?.oneId === packageOneId) {
+				singlePackage.value.name = data.package.name
+			}
+
+			const existPackage = packages.value.find(p => {
+				return p.oneId === packageOneId
+			})
+
+			if (existPackage) existPackage.name = data.package.name
+
+			toast(response.data.msg)
+			return
+		} catch (error: any) {
+			toast(
+				error.message ||
+					error.response.data.msg ||
+					"Qandaydir xatolik yuzaga keldi, boshqatdan urinib ko'ring"
+			)
+		}
+	}
+
 	async function addQuestionToPackage(data: FormData, packageOneId: string) {
 		try {
 			const response = await teacherInstance.post('/add-question/' + packageOneId, data)
@@ -379,5 +416,6 @@ export const usePackage = defineStore('package-store', () => {
 		editQuestion,
 		deleteImageOfQuestion,
 		exportQuestions,
+		editPackage,
 	}
 })
