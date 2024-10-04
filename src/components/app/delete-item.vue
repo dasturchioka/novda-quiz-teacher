@@ -10,21 +10,23 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import Button from '../ui/button/Button.vue';
 
 const emit = defineEmits(['do:action'])
+const props = defineProps<{ title?: string; description?: string }>()
 </script>
 
 <template>
-	<div class="delete-package">
+	<div class="delete-item">
 		<AlertDialog>
 			<AlertDialogTrigger as-child>
 				<slot name="trigger"></slot>
 			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle>Ishonchingiz komilmi?</AlertDialogTitle>
-					<AlertDialogDescription> Bu ma'lumotlar qayta tiklanmaydi </AlertDialogDescription>
+					<AlertDialogTitle>{{ title ?? `Ishonchingiz komilmi?` }}</AlertDialogTitle>
+					<AlertDialogDescription>
+						{{ description ?? `Bu ma'lumotlar qayta tiklanmaydi` }}
+					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Yo'q</AlertDialogCancel>

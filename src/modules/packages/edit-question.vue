@@ -112,12 +112,13 @@ watch(
 						/>
 						<Button
 							v-show="newImg"
-							type="button"
 							@click="clearImg"
+							type="button"
 							class="my-4"
 							variant="destructive"
-							><Trash class="size-5"
-						/></Button>
+						>
+							<Trash class="size-5" />
+						</Button>
 					</div>
 					<label for="show-image" class="text-sm md:text-base font-medium">Rasm qo'shish</label>
 					<input
@@ -128,13 +129,22 @@ watch(
 					/>
 				</div>
 
-				<div v-if="showImage && editedQuestionDetails.img" class="space-y-2">
-					<img
-						ref="imgTag"
-						:src="config.SERVER_BASE + editedQuestionDetails.img"
-						alt="Savol rasmi"
-						class="w-full max-h-64 object-contain rounded-lg"
-					/>
+				<div v-if="showImage && editedQuestionDetails.img" class="space-y-2 flex flex-col items-center justify-center">
+					<a target="_blank" :href="config.SERVER_BASE + editedQuestionDetails.img">
+						<img
+							ref="imgTag"
+							:src="config.SERVER_BASE + editedQuestionDetails.img"
+							alt="Savol rasmi"
+							class="w-full max-h-64 object-contain rounded-lg"
+						/>
+					</a>
+					<DeleteItem description="Bu rasm qayta tiklanmaydi!" @do:action="deleteImgOfQuestion">
+						<template #trigger>
+							<Button class="my-4" type="button" variant="destructive">
+								<Trash class="size-5" />
+							</Button>
+						</template>
+					</DeleteItem>
 					<input
 						type="file"
 						@change="handleNewImg"
