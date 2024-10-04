@@ -3,7 +3,7 @@ import Header from '@/components/ui/header/Header.vue';
 </script>
 
 <template>
-	<div class="groups-page">
-    <Header>Guruhlar</Header>
+	<div class="classrooms-page">
+    <Header>Sinfxonalar</Header>
   </div>
 </template>

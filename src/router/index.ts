@@ -7,7 +7,7 @@ const routes: RouteRecordRaw[] = [
 		name: 'default-layout',
 		path: '/',
 		component: () => import('@/layouts/default-layout.vue'),
-		redirect: '/groups',
+		redirect: '/classrooms',
 		beforeEnter: (to, from, next) => {
 			const token = Cookie.get('token')
 			if (token) {
@@ -18,9 +18,9 @@ const routes: RouteRecordRaw[] = [
 		},
 		children: [
 			{
-				name: 'default-groups',
-				path: 'groups',
-				component: () => import('@/pages/groups/groups-page.vue'),
+				name: 'default-classrooms',
+				path: 'classrooms',
+				component: () => import('@/pages/classrooms/classrooms-page.vue'),
 				meta: {
 					layout: 'default',
 				},

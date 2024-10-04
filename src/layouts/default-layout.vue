@@ -19,7 +19,7 @@ const visibilityBetaComponent = ref(Cookies.get('beta-component'))
 const authStore = useAuth()
 
 const navItems = [
-	{ href: '/groups', label: 'Guruhlar', icon: Boxes },
+	{ href: '/classrooms', label: 'Sinfxonalar', icon: Boxes },
 	{ href: '/students', label: 'Talabalar', icon: UsersRound },
 	{ href: '/exams', label: 'Imtihonlar', icon: CircleDashed },
 	{ href: '/packages', label: 'Paketlar', icon: ListCheck },

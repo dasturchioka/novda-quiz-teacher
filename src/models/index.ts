@@ -31,4 +31,22 @@ export interface Package {
 	[key: string]: any
 }
 
+export interface Classroom {
+	id: string
+	oneId: string
+	name: string
+	teacher: Teacher
+	students: Student[]
+	teacherId: string
+	[key: string]: any
+}
+
+export interface Student {
+	id: string
+	oneId: string
+	fullname: string
+	classrooms: Classroom[]
+	[key: string]: any
+}
+
 export type StatusPackage = 'Private' | 'Public'

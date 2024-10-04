@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/alert-dialog'
 
 const emit = defineEmits(['do:action'])
-const props = defineProps<{ title?: string; description?: string }>()
+defineProps<{ title?: string; description?: string }>()
 </script>
 
 <template>

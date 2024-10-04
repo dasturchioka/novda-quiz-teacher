@@ -13,6 +13,8 @@
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "docx": "^8.5.0",
+    "file-saver": "^2.0.5",
     "js-cookie": "^3.0.5",
     "lucide-vue-next": "^0.446.0",
     "pinia": "^2.2.2",
@@ -24,6 +26,7 @@
     "vue-sonner": "^1.2.1"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.7.2",
     "@vitejs/plugin-vue": "^5.1.2",
