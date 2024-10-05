@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import Button from '@/components/ui/button/Button.vue'
 import { Package } from '@/models'
-import { Check, Eye, Globe, Lock, Pencil, X } from 'lucide-vue-next'
+import { Check, Eye, Globe, Lock, Pencil, Trash, X } from 'lucide-vue-next'
 import { computed, ref, toRefs } from 'vue'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import Input from '@/components/ui/input/Input.vue'
 import { usePackage } from './store'
+import DeleteItem from '@/components/app/delete-item.vue'
 
 const packageStore = usePackage()
 
@@ -58,15 +59,23 @@ const editPackage = async () => {
 			</HoverCard>
 			<h1
 				v-show="!isEditingPackage"
-				class="sm:text-xl text-lg font-bold font-manrope truncate group"
+				class="sm:text-xl text-lg font-bold font-manrope truncate group flex items-center"
 			>
 				{{ singlePackage.name }}
-				<button
-					@click="toggleEditingPackage(true)"
-					class="ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
+				<div
+					class="ml-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center space-x-2"
 				>
-					<Pencil class="size-4" />
-				</button>
+					<button @click="toggleEditingPackage(true)">
+						<Pencil class="size-4" />
+					</button>
+					<DeleteItem @do:action="packageStore.deletePackage(singlePackage.oneId)">
+						<template #trigger>
+							<button>
+								<Trash class="size-4 text-red-500" />
+							</button>
+						</template>
+					</DeleteItem>
+				</div>
 			</h1>
 			<form
 				@submit.prevent="editPackage"
