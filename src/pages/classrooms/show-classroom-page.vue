@@ -131,7 +131,13 @@ const exportToExcel = async () => {
 									</Badge>
 								</div>
 							</TableCell>
-							<TableCell>{{ student.scores.length ? student.scores[0] : "Yo'q" }}</TableCell>
+							<TableCell>{{
+								student.scores.length
+									? student.scores[student.scores.length - 1].questionsNumber +
+									  '/' +
+									  student.scores[student.scores.length - 1].correctAnswers
+									: "Yo'q"
+							}}</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>

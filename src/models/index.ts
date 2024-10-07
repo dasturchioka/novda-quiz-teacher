@@ -47,7 +47,35 @@ export interface Student {
 	fullname: string
 	classrooms: Classroom[]
 	password: string
-	scores: []
+	scores: Score[]
+	[key: string]: any
+}
+
+export interface Score {
+	id: string
+	oneId: string
+	correctAnswers: number
+	exam: Exam
+	student: Student
+	examId: string
+	questionsNumber: number
+	studentId: string
+	[key: string]: any
+}
+
+export interface Exam {
+	id: string
+	oneId: string
+	packageOfExam: Package
+	name: string
+	classroom: Classroom
+	teacher: Teacher
+	students: Student[]
+	packageId: string
+	classromId: string
+	active: boolean
+	teacherId: string
+	score: Score[]
 	[key: string]: any
 }
 
