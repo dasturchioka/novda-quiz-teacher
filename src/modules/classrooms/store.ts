@@ -47,13 +47,12 @@ export const useClassroom = defineStore('classroom-store', () => {
 		}
 	}
 
-	async function getAllPackages(questions: number = 0) {
+	async function getAllClassrooms(students: number = 0) {
 		try {
 			const oneId = Cookies.get('oneId')
-			console.log(oneId);
-			
+
 			const response = await teacherInstance.get(
-				`/get-all-packages?questions=${questions}&teacherOneId=${oneId}`
+				`/get-classrooms?students=${students}&teacherOneId=${oneId}`
 			)
 
 			if (!response) {
@@ -66,7 +65,7 @@ export const useClassroom = defineStore('classroom-store', () => {
 				return
 			}
 
-			// packages.value = response.data.packages
+			classrooms.value = response.data.classrooms
 			return
 		} catch (error: any) {
 			toast(
@@ -77,87 +76,80 @@ export const useClassroom = defineStore('classroom-store', () => {
 		}
 	}
 
-	// async function getSinglePackage(oneId: string, questions: number = 0) {
-	// 	try {
-	// 		const response = await teacherInstance.get(
-	// 			`/get-single-package/${oneId}?questions=${questions}`
-	// 		)
+	async function editClassroom(name: string, classroomOneId: string) {
+		try {
+			const response = await teacherInstance.put(`/edit-classroom/${classroomOneId}`, { name })
 
-	// 		if (!response) {
-	// 			toast('Server yoki internet bilan aloqa mavjud emas')
-	// 			return
-	// 		}
+			if (!response) {
+				toast('Internet yoki server bilan aloqa mavjud emas')
+				return
+			}
 
-	// 		if (response.data.status === 'bad') {
-	// 			toast(response.data.msg)
-	// 			return
-	// 		}
+			if (response.data.status !== 'ok') {
+				toast(response.data.msg)
+				return
+			}
 
-	// 		singlePackage.value = response.data.singlePackage
-	// 		if (
-	// 			singlePackageQuestions.value &&
-	// 			singlePackageQuestions.value.packageOneId === response.data.singlePackage.oneId
-	// 		) {
-	// 			// Update the questions
-	// 			singlePackageQuestions.value.questions = response.data.questions
-	// 		} else {
-	// 			// If the packageOneId is different or singlePackageQuestions is null, update the whole object
-	// 			singlePackageQuestions.value = {
-	// 				packageOneId: response.data.singlePackage.oneId,
-	// 				questions: response.data.questions,
-	// 			}
-	// 		}
+			const data = await response.data
 
-	// 		return
-	// 	} catch (error: any) {
-	// 		toast(
-	// 			error.message ||
-	// 				error.response.data.msg ||
-	// 				"Qandaydir xatolik yuzaga keldi, boshqatdan urinib ko'ring"
-	// 		)
-	// 	}
-	// }
+			if (singleClassroom.value?.oneId === classroomOneId) {
+				singleClassroom.value.name = data.classroom.name
+			}
 
-	// async function addQuestionToPackage(data: FormData, packageOneId: string) {
-	// 	try {
-	// 		const response = await teacherInstance.post('/add-question/' + packageOneId, data)
+			const existClassroom = classrooms.value.find(c => {
+				return c.oneId === classroomOneId
+			})
 
-	// 		if (!response) {
-	// 			toast('Server yoki internet bilan aloqa mavjud emas')
-	// 			return
-	// 		}
+			if (existClassroom) existClassroom.name = data.classroom.name
 
-	// 		if (response.data.status === 'bad') {
-	// 			toast(response.data.msg)
-	// 			return
-	// 		}
+			toast(response.data.msg)
+			return
+		} catch (error: any) {
+			toast(
+				error.message ||
+					error.response.data.msg ||
+					"Qandaydir xatolik yuzaga keldi, boshqatdan urinib ko'ring"
+			)
+		}
+	}
 
-	// 		if (
-	// 			singlePackageQuestions.value &&
-	// 			singlePackageQuestions.value.packageOneId === response.data.packageOneId
-	// 		) {
-	// 			// Update the questions
-	// 			singlePackageQuestions.value.questions.push(response.data.question)
-	// 		}
+	async function getSingleClassroom(classRoomOneId: string, students: number = 0) {
+		try {
 
-	// 		toast(response.data.msg)
-	// 		return
-	// 	} catch (error: any) {
-	// 		toast(
-	// 			error.message ||
-	// 				error.response.data.msg ||
-	// 				"Qandaydir xatolik yuzaga keldi, boshqatdan urinib ko'ring"
-	// 		)
-	// 	}
-	// }
+			const response = await teacherInstance.get(
+				`/get-single-classroom?students=${students}&classroomOneId=${classRoomOneId}`
+			)
+
+			if (!response) {
+				toast('Server yoki internet bilan aloqa mavjud emas')
+				return
+			}
+
+			if (response.data.status === 'bad') {
+				toast(response.data.msg)
+				return
+			}
+
+			singleClassroom.value = response.data.classroom
+			singleClassroomsStudents.value.classRoomOneId = classRoomOneId
+			singleClassroomsStudents.value.students = response.data.students
+			return
+		} catch (error: any) {
+			toast(
+				error.message ||
+					error.response.data.msg ||
+					"Qandaydir xatolik yuzaga keldi, boshqatdan urinib ko'ring"
+			)
+		}
+	}
 
 	return {
 		classrooms,
 		createClassroom,
-		getAllPackages,
-		getSinglePackage,
-		addQuestionToPackage,
 		singleClassroom,
 		singleClassroomsStudents,
+		getAllClassrooms,
+		editClassroom,
+		getSingleClassroom,
 	}
 })

@@ -65,6 +65,14 @@ const routes: RouteRecordRaw[] = [
 					layout: 'default',
 				},
 			},
+			{
+				name: 'default-show-classroom',
+				path: 'classroom/:oneId',
+				component: () => import('@/pages/classrooms/show-classroom-page.vue'),
+				meta: {
+					layout: 'default',
+				},
+			},
 		],
 	},
 	{

@@ -1,13 +1,41 @@
 <script lang="ts" setup>
 import Button from '@/components/ui/button/Button.vue'
-import { Package } from '@/models'
-import { Eye, Globe, Lock } from 'lucide-vue-next'
-import { toRefs } from 'vue'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
+import { Classroom } from '@/models'
+import { Check, Clipboard, LogIn, Pencil, Trash, X } from 'lucide-vue-next'
+import { computed, ref, toRefs } from 'vue'
+import Input from '@/components/ui/input/Input.vue'
+import { useClassroom } from './store'
+import DeleteItem from '@/components/app/delete-item.vue'
+import { useClipboard } from '@vueuse/core'
 
-const props = defineProps<{ singlePackage: Package }>()
+const classroomStore = useClassroom()
 
-const { singlePackage } = toRefs(props)
+const props = defineProps<{ singleClassroom: Classroom }>()
+
+const { singleClassroom } = toRefs(props)
+
+const newName = ref(singleClassroom.value.name ?? '')
+
+const isEditingClassroom = ref(false)
+
+const toggleEditingClassroom = (payload: boolean) => {
+	isEditingClassroom.value = payload
+}
+
+const disableConfirmButton = computed(() => {
+	if (newName.value.length <= 2) {
+		return true
+	}
+
+	return false
+})
+
+const editClassroom = async () => {
+	await classroomStore.editClassroom(newName.value, singleClassroom.value.oneId)
+	isEditingClassroom.value = false
+}
+
+const { copy, copied } = useClipboard({ source: singleClassroom.value.oneId })
 </script>
 
 <template>
@@ -15,33 +43,60 @@ const { singlePackage } = toRefs(props)
 		class="single-package p-4 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 border dark:text-neutral-50 rounded-md transition-all relative hover:bg-neutral-200 dark:hover:bg-neutral-900"
 		style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
 	>
-		<h1 class="sm:text-xl text-lg font-bold font-manrope truncate flex items-center">
-			<HoverCard :open-delay="20" :close-delay="20">
-				<HoverCardTrigger as-child
-					><Lock
-						class="size-5 mr-2 text-red-500 stroke-[3px]"
-						v-if="singlePackage.status === 'Private'" />
-					<Globe
-						class="size-5 mr-2 text-green-500 stroke-[2px]"
-						v-if="singlePackage.status === 'Public'"
-				/></HoverCardTrigger>
-				<HoverCardContent>{{
-					singlePackage.status === 'Private'
-						? "Paket faqatgina sizga ko'rinadi"
-						: 'Paket hamma uchun ochiq'
-				}}</HoverCardContent>
-			</HoverCard>
-
-			{{ singlePackage.name }}
-		</h1>
+		<div class="flex items-center">
+			<h1
+				v-show="!isEditingClassroom"
+				class="sm:text-xl text-lg font-bold font-manrope truncate group flex items-center"
+			>
+				{{ singleClassroom.name }}
+				<div
+					class="ml-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center space-x-2"
+				>
+					<button @click="toggleEditingClassroom(true)">
+						<Pencil class="size-4" />
+					</button>
+					<DeleteItem>
+						<template #trigger>
+							<button>
+								<Trash class="size-4 text-red-500" />
+							</button>
+						</template>
+					</DeleteItem>
+				</div>
+			</h1>
+			<form
+				@submit.prevent="editClassroom"
+				class="flex items-center space-x-2"
+				v-show="isEditingClassroom"
+			>
+				<Input autofocus v-model:model-value="newName" />
+				<button type="button" @click="toggleEditingClassroom(false)">
+					<X class="size-4" />
+				</button>
+				<button
+					:disabled="disableConfirmButton"
+					type="submit"
+					class="disabled:text-gray-400 disabled:cursor-not-allowed"
+				>
+					<Check class="size-4" />
+				</button>
+			</form>
+		</div>
 		<p class="truncate">
-			<b>{{ singlePackage.questionCount }}</b> ta savol
+			<b>{{ singleClassroom.oneId }}</b>
+			<button @click="copy(singleClassroom.oneId)" class="bg-black rounded p-1 ml-2">
+				<Clipboard v-show="!copied" class="size-3 stroke-[3] text-white" />
+				<Check v-show="copied" class="size-3 stroke-[3] text-white" />
+			</button>
+		</p>
+		<p class="truncate">
+			<b>{{ singleClassroom.studentsCount }}</b> ta o'quvchi
 		</p>
 		<Button
-			@click="$router.push(`/package/${singlePackage.oneId}`)"
+			@click="$router.push(`/classroom/${singleClassroom.oneId}`)"
 			class="w-full mt-6"
 			variant="outline"
-			><Eye class="size-4 mr-2" /> Ko'rish</Button
+			><LogIn class="size-4 mr-2" /> Kirish</Button
 		>
 	</div>
 </template>

@@ -46,6 +46,8 @@ export interface Student {
 	oneId: string
 	fullname: string
 	classrooms: Classroom[]
+	password: string
+	scores: []
 	[key: string]: any
 }
 
