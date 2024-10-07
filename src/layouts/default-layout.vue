@@ -95,7 +95,7 @@ onUnmounted(() => {
 							:class="[
 								'flex items-center rounded-md px-3 py-2 font-medium transition-colors font-noto',
 								currentPath === item.href
-									? 'bg-blue-500 text-neutral-50 hover:text-neutral-50 hover:bg-blue-500'
+									? 'bg-neutral-900 text-neutral-50 hover:text-neutral-50 hover:bg-neutral-900'
 									: 'text-neutral-900 dark:hover:bg-neutral-800 hover:bg-neutral-200',
 							]"
 						>
@@ -106,7 +106,7 @@ onUnmounted(() => {
 				</div>
 				<div
 					v-if="visibilityBetaComponent === 'true'"
-					class="beta bg-blue-700 text-neutral-50 mx-2 rounded-md p-4 justify-self-end mb-4"
+					class="beta bg-neutral-900 text-neutral-50 mx-2 rounded-md p-4 justify-self-end mb-4"
 				>
 					<h1 class="text-xl flex items-center font-bold font-manrope mb-4">
 						Sayt beta holatda!
@@ -141,8 +141,3 @@ onUnmounted(() => {
 		</div>
 	</div>
 </template>
-
-<style scoped>
-.router-link-active.router-link-exact-active {
-}
-</style>
