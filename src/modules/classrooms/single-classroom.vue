@@ -40,7 +40,7 @@ const { copy, copied } = useClipboard({ source: singleClassroom.value.oneId })
 
 <template>
 	<div
-		class="single-package p-4 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 border dark:text-neutral-50 rounded-md transition-all relative hover:bg-neutral-200 dark:hover:bg-neutral-900"
+		class="single-classroom p-4 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 border dark:text-neutral-50 rounded-md transition-all relative hover:bg-neutral-200 dark:hover:bg-neutral-900"
 		style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
 	>
 		<div class="flex items-center">
