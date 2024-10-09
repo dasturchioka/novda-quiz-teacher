@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { MenuIcon, XIcon, Boxes, ListCheck, Globe, X } from 'lucide-vue-next'
+import { MenuIcon, XIcon, Boxes, ListCheck, Globe, X, UserRound } from 'lucide-vue-next'
 import { useAuth } from '@/stores/auth'
 import Cookies from 'js-cookie'
 
@@ -13,6 +13,7 @@ const navItems = [
 	{ href: '/classrooms', label: 'Sinfxonalar', icon: Boxes },
 	{ href: '/packages', label: 'Paketlar', icon: ListCheck },
 	{ href: '/community', label: 'Hamjamiyat', icon: Globe },
+	{ href: '/profile', label: 'Profil', icon: UserRound },
 ]
 
 const route = useRoute()

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ClipboardIcon, Download, StopCircle, Trash } from 'lucide-vue-next'
+import { ClipboardIcon, Download, StopCircle, Trash, UsersRound } from 'lucide-vue-next'
 import { useClassroom } from '@/modules/classrooms/store'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
@@ -97,7 +97,7 @@ const exportStudents = async () => {
 					}}</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div class="overflow-x-auto">
+					<div v-if="singleClassroomsStudents.students.length" class="overflow-x-auto">
 						<div class="inline-block min-w-full align-middle">
 							<div class="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
 								<Table class="overflow-x-scroll w-full">
@@ -142,10 +142,14 @@ const exportStudents = async () => {
 								</Table>
 							</div>
 						</div>
+						<Button class="mt-4" @click="exportStudents">
+							<Download class="size-5 mr-2" /> Yuklab olish
+						</Button>
 					</div>
-					<Button class="mt-4" @click="exportStudents">
-						<Download class="size-5 mr-2" /> Yuklab olish
-					</Button>
+					<div v-else class="text-center py-8 bg-gray-50 rounded-lg">
+						<UsersRound class="size-16 text-gray-400 mx-auto mb-3" />
+						<p class="text-gray-600 mb-3 font-semibold font-manrope">Hali talabalar qo'shilmagan</p>
+					</div>
 				</CardContent>
 			</Card>
 

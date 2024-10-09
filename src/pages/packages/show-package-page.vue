@@ -47,7 +47,7 @@ const exportQuestions = async () => {
 <template>
 	<div class="show-package">
 		<div v-if="singlePackage">
-			<div class="top bg-neutral-200 sm:p-6 p-4 rounded-lg">
+			<div class="top bg-blue-500 text-neutral-50 sm:p-6 p-4 rounded-lg">
 				<h1 class="sm:text-3xl text-xl font-noto font-bold flex items-center">
 					{{ singlePackage.name }}
 					<HoverCard :open-delay="20" :close-delay="20">

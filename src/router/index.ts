@@ -50,6 +50,14 @@ const routes: RouteRecordRaw[] = [
 				},
 			},
 			{
+				name: 'default-profile',
+				path: 'profile',
+				component: () => import('@/pages/profile/profile-page.vue'),
+				meta: {
+					layout: 'default',
+				},
+			},
+			{
 				name: 'default-show-package',
 				path: 'package/:oneId',
 				component: () => import('@/pages/packages/show-package-page.vue'),
