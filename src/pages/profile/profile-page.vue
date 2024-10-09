@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useProfile } from '@/modules/profile/store'
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
