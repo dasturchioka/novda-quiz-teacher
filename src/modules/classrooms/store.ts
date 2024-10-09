@@ -1,5 +1,5 @@
 import { teacherInstance } from '@/http'
-import { Classroom, Package, Question, Student } from '@/models'
+import { Classroom, Student } from '@/models'
 import Cookies from 'js-cookie'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'

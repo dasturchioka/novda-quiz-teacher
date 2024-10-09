@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { CirclePlus, ClipboardIcon, Download, StopCircle, Trash } from 'lucide-vue-next'
+import { ClipboardIcon, Download, StopCircle, Trash } from 'lucide-vue-next'
 import { useClassroom } from '@/modules/classrooms/store'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'

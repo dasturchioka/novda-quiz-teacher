@@ -89,8 +89,6 @@ export const useExams = defineStore('exams-store', () => {
 
 	async function deleteExam(examOneId: string) {
 		try {
-			const teacherOneId = Cookies.get('oneId')
-
 			const response = await teacherInstance.delete(`/delete-exam/${examOneId}`)
 
 			if (!response) {

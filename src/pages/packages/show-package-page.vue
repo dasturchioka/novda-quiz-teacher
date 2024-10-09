@@ -8,7 +8,7 @@ import { usePackage } from '@/modules/packages/store'
 import AddQuestions from '@/modules/questions/add-questions.vue'
 import { Download, Globe, Lock, User } from 'lucide-vue-next'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import {
 	AlertDialog,
