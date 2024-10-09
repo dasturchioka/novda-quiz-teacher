@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref, toRefs, watch } from 'vue'
-import { Question } from '@/models/'
+import DeleteItem from '@/components/app/ask-before-action.vue'
 import Button from '@/components/ui/button/Button.vue'
+import Checkbox from '@/components/ui/checkbox/Checkbox.vue'
 import Input from '@/components/ui/input/Input.vue'
 import Label from '@/components/ui/label/Label.vue'
 import Textarea from '@/components/ui/textarea/Textarea.vue'
-import Checkbox from '@/components/ui/checkbox/Checkbox.vue'
-import { CheckCheck, Trash } from 'lucide-vue-next'
 import { config } from '@/config'
-import DeleteItem from '@/components/app/delete-item.vue'
-import { usePackage } from './store'
+import { Question } from '@/models/'
+import { CheckCheck, Trash } from 'lucide-vue-next'
+import { ref, toRefs, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { usePackage } from './store'
 
 const route = useRoute()
 const packageStore = usePackage()

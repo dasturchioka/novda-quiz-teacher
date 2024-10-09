@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import AskBeforeAction from '@/components/app/delete-item.vue'
+import AskBeforeAction from '@/components/app/ask-before-action.vue'
 import { Button } from '@/components/ui/button/'
 import { Exam } from '@/models'
-import { Power, PowerOff, Search } from 'lucide-vue-next'
+import { PowerOff, Search } from 'lucide-vue-next'
 import { toRefs } from 'vue'
 
 const props = defineProps<{ singleExam: Exam }>()

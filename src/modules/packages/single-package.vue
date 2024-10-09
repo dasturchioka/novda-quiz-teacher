@@ -1,12 +1,12 @@
 <script lang="ts" setup>
+import DeleteItem from '@/components/app/ask-before-action.vue'
 import Button from '@/components/ui/button/Button.vue'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
+import Input from '@/components/ui/input/Input.vue'
 import { Package } from '@/models'
 import { Check, Eye, Globe, Lock, Pencil, Trash, X } from 'lucide-vue-next'
 import { computed, ref, toRefs } from 'vue'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
-import Input from '@/components/ui/input/Input.vue'
 import { usePackage } from './store'
-import DeleteItem from '@/components/app/delete-item.vue'
 
 const packageStore = usePackage()
 

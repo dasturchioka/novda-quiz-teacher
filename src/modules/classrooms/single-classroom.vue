@@ -1,12 +1,12 @@
 <script lang="ts" setup>
+import DeleteItem from '@/components/app/ask-before-action.vue'
 import Button from '@/components/ui/button/Button.vue'
+import Input from '@/components/ui/input/Input.vue'
 import { Classroom } from '@/models'
+import { useClipboard } from '@vueuse/core'
 import { Check, Clipboard, LogIn, Pencil, Trash, X } from 'lucide-vue-next'
 import { computed, ref, toRefs } from 'vue'
-import Input from '@/components/ui/input/Input.vue'
 import { useClassroom } from './store'
-import DeleteItem from '@/components/app/delete-item.vue'
-import { useClipboard } from '@vueuse/core'
 
 const classroomStore = useClassroom()
 

@@ -22,17 +22,20 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
+import { Classroom } from '@/models'
 
 const examsStore = useExams()
-const prop = defineProps<{ asWhat: 'card' | 'button' }>()
+const prop = defineProps<{ asWhat: 'card' | 'button'; classroom: Classroom }>()
 
-const { asWhat } = toRefs(prop)
+const { asWhat, classroom } = toRefs(prop)
 
 const examDetails = ref({
 	name: '',
 	packageOneId: '',
-	classroomOneId: '',
+	classroomOneId: classroom.value.oneId,
 })
+
+console.log(examDetails.value)
 
 const startExam = async () => {
 	await examsStore.startExam(examDetails.value)
@@ -76,7 +79,7 @@ onMounted(async () => {
 							id="name"
 						/>
 					</div>
-					<div class="form-group w-full">
+					<div v-if="!classroom" class="form-group w-full">
 						<Select class="w-full" v-model:model-value="examDetails.classroomOneId">
 							<SelectTrigger class="w-full">
 								<SelectValue placeholder="Sinfxonani tanlang" />

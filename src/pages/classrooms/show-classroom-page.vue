@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import * as XLSX from 'xlsx'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import {
 	Table,
 	TableBody,
@@ -11,12 +11,20 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Check, Clipboard, Download, User } from 'lucide-vue-next'
+import { CirclePlus, ClipboardIcon, Download, StopCircle, Trash } from 'lucide-vue-next'
 import { useClassroom } from '@/modules/classrooms/store'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
-import { useClipboard } from '@vueuse/core'
+import Card from '@/components/ui/card/Card.vue'
+import CardHeader from '@/components/ui/card/CardHeader.vue'
+import CardContent from '@/components/ui/card/CardContent.vue'
+import CardTitle from '@/components/ui/card/CardTitle.vue'
+import CardDescription from '@/components/ui/card/CardDescription.vue'
+import askBeforeAction from '@/components/app/ask-before-action.vue'
+import { useExams } from '@/modules/exams/store'
+import CreateExam from '@/modules/exams/create-exam.vue'
 
+const examStore = useExams()
 const route = useRoute()
 const classroomStore = useClassroom()
 
@@ -25,8 +33,6 @@ const { singleClassroom, singleClassroomsStudents } = storeToRefs(classroomStore
 onMounted(async () => {
 	await classroomStore.getSingleClassroom(route.params.oneId as string, 1)
 })
-
-const { copy, copied } = useClipboard({ source: route.params.oneId as string })
 
 const calculateSize = async (data: any) => {
 	// Get keys (column headers)
@@ -44,7 +50,7 @@ const calculateSize = async (data: any) => {
 	return columnWidths
 }
 
-const exportToExcel = async () => {
+const exportStudents = async () => {
 	const newStudentsFormat = singleClassroomsStudents.value.students.map((s, index) => {
 		return {
 			'Tartib raqam': index + 1,
@@ -74,81 +80,138 @@ const exportToExcel = async () => {
 </script>
 
 <template>
-	<div class="show-classroom-page">
-		<div v-if="singleClassroom">
-			<div class="top bg-neutral-200 sm:p-6 p-4 rounded-lg">
-				<h1 class="sm:text-3xl text-xl font-noto font-bold flex items-center">
-					{{ singleClassroom.name }}
-				</h1>
-				<p class="truncate">
-					<b>{{ singleClassroom.oneId }}</b>
-					<button @click="copy(singleClassroom.oneId)" class="bg-black rounded p-1 ml-2">
-						<Clipboard v-show="!copied" class="size-3 stroke-[3] text-white" />
-						<Check v-show="copied" class="size-3 stroke-[3] text-white" />
-					</button>
-				</p>
-				<p class="flex items-center font-manrope font-semibold mt-2">
-					<User class="size-5 mr-2" /> {{ singleClassroom.teacher.fullname }}
-				</p>
-			</div>
-			<div
-				v-if="singleClassroomsStudents.students.length"
-				class="students flex flex-col items-center"
-			>
-				<Table class="w-full">
-					<TableHeader>
-						<TableRow>
-							<TableHead class="w-[30px]">№</TableHead>
-							<TableHead>Ism familiya va OneId</TableHead>
-							<TableHead>Parol</TableHead>
-							<TableHead>Sinfxonalar</TableHead>
-							<TableHead>Oxirgi Natija</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						<TableRow
-							v-for="(student, index) in singleClassroomsStudents.students"
-							:key="student.id"
+	<div class="min-h-screen font-manrope">
+		<div v-if="singleClassroom" class="max-w-7xl mx-auto space-y-6">
+			<header class="bg-blue-500 text-white p-6 rounded-lg shadow-md">
+				<h1 class="text-3xl font-bold font-noto">Sinfxona: {{ singleClassroom.name }}</h1>
+				<p class="">{{ singleClassroom.oneId }}</p>
+			</header>
+
+			<Card class="w-full">
+				<CardHeader>
+					<CardTitle>Talabalar</CardTitle>
+					<CardDescription>{{
+						singleClassroomsStudents.students && singleClassroomsStudents.students.length
+							? `${singleClassroomsStudents.students.length} ta talaba`
+							: ''
+					}}</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<div class="overflow-x-auto">
+						<div class="inline-block min-w-full align-middle">
+							<div class="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+								<Table class="overflow-x-scroll w-full">
+									<TableHeader>
+										<TableRow>
+											<TableHead class="whitespace-nowrap">№</TableHead>
+											<TableHead class="whitespace-nowrap">OneId</TableHead>
+											<TableHead class="whitespace-nowrap">Ism Familiya</TableHead>
+											<TableHead class="whitespace-nowrap">Parol</TableHead>
+											<TableHead class="whitespace-nowrap">Sinfxonalar</TableHead>
+											<TableHead class="whitespace-nowrap">Oxirgi natija</TableHead>
+										</TableRow>
+									</TableHeader>
+									<TableBody>
+										<TableRow
+											v-for="(student, index) in singleClassroomsStudents.students"
+											:key="index"
+										>
+											<TableCell class="whitespace-nowrap"
+												><b>{{ index + 1 }}</b></TableCell
+											>
+											<TableCell class="whitespace-nowrap">{{ student.oneId }}</TableCell>
+											<TableCell class="whitespace-nowrap"
+												><b>{{ student.fullname }}</b></TableCell
+											>
+											<TableCell class="whitespace-nowrap">{{ student.password }}</TableCell>
+											<TableCell class="whitespace-nowrap">
+												<Badge
+													v-for="c in student.classrooms"
+													:key="c.id"
+													variant="default"
+													class="bg-blue-500 hover:bg-blue-400 mr-1 mb-1"
+												>
+													{{ c.name }}
+												</Badge>
+											</TableCell>
+											<TableCell class="whitespace-nowrap">{{
+												student.lastScore ?? "Yo'q"
+											}}</TableCell>
+										</TableRow>
+									</TableBody>
+								</Table>
+							</div>
+						</div>
+					</div>
+					<Button class="mt-4" @click="exportStudents">
+						<Download class="size-5 mr-2" /> Yuklab olish
+					</Button>
+				</CardContent>
+			</Card>
+
+			<Card>
+				<CardHeader>
+					<CardTitle>Imtihonlar</CardTitle>
+					<CardDescription>{{
+						singleClassroom.exams && singleClassroom.exams.length
+							? `${singleClassroom.exams.length} ta imtihon`
+							: ''
+					}}</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<div
+						v-if="!singleClassroom.exams || singleClassroom.exams.length === 0"
+						class="text-center py-8 bg-gray-50 rounded-lg"
+					>
+						<ClipboardIcon class="size-16 text-gray-400 mx-auto mb-3" />
+						<p class="text-gray-600 mb-3 font-semibold font-manrope">Hali imtihonlar mavjud emas</p>
+						<CreateExam :classroom="singleClassroom" as-what="button" />
+					</div>
+					<ul v-else class="space-y-2">
+						<li
+							v-for="exam in singleClassroom.exams"
+							:key="exam.name"
+							class="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition duration-150 ease-in-out"
 						>
-							<TableCell class="font-medium">{{ index + 1 }}</TableCell>
-							<TableCell>
-								<div>{{ student.fullname }}</div>
-								<div class="text-sm text-gray-500">{{ student.oneId }}</div>
-							</TableCell>
-							<TableCell>
-								<div class="flex items-center space-x-2">
-									<span>{{ student.password }}</span>
+							<div class="flex items-center justify-between flex-wrap space-y-4">
+								<div>
+									<h4 class="text-lg font-medium text-gray-800">{{ exam.name }}</h4>
+									<p class="text-gray-600">
+										Paketi: <b>{{ exam.packageOfExam.name }},</b>
+										<b>{{ exam.packageOfExam.questionsCount }} ta savol</b>
+									</p>
 								</div>
-							</TableCell>
-							<TableCell>
-								<div class="flex flex-wrap gap-1">
-									<Badge
-										v-for="classroom in student.classrooms"
-										:key="classroom.name"
-										variant="secondary"
+								<div v-if="exam.active" class="text-right">
+									<p class="text-sm text-gray-500">Imtihondagi talabalar</p>
+									<p class="text-2xl font-bold text-indigo-600">{{ exam.studentsCount }}</p>
+								</div>
+							</div>
+							<div class="mt-4 flex justify-end">
+								<div v-if="exam.active">
+									<askBeforeAction
+										description="Siz ushbu imtihonni tugatmoqchisiz, imtihonni tugatmagan talabalarning natijalari saqlanmaydi"
+										@do:action="examStore.finishExam(exam.oneId)"
 									>
-										{{ classroom.name }}
-									</Badge>
+										<template #trigger>
+											<Button variant="destructive">
+												<StopCircle class="size-5 mr-2" /> Tugatish
+											</Button>
+										</template>
+									</askBeforeAction>
 								</div>
-							</TableCell>
-							<TableCell>{{
-								student.scores.length
-									? student.scores[student.scores.length - 1].questionsNumber +
-									  '/' +
-									  student.scores[student.scores.length - 1].correctAnswers
-									: "Yo'q"
-							}}</TableCell>
-						</TableRow>
-					</TableBody>
-				</Table>
-				<Button class="self-end my-4" @click="exportToExcel">
-					<Download class="size-5 mr-2" /> Yuklab olish
-				</Button>
-			</div>
-			<div v-else class="my-4 font-manrope font-semibold text-xl">
-				Bu sinfda hali o'quvchilar yo'q
-			</div>
+								<div v-else class="flex items-center space-x-2">
+									<askBeforeAction @do:action="examStore.deleteExam(exam.oneId)">
+										<template #trigger>
+											<Button variant="destructive"> <Trash class="size-5" /> </Button>
+										</template>
+									</askBeforeAction>
+									<Button><Download class="size-5 mr-2" /> Natijalarni olish </Button>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</CardContent>
+			</Card>
 		</div>
-		<div v-else>Ma'lumot topilmadi</div>
 	</div>
 </template>

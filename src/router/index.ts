@@ -42,14 +42,6 @@ const routes: RouteRecordRaw[] = [
 				},
 			},
 			{
-				name: 'default-exams',
-				path: 'exams',
-				component: () => import('@/pages/exams/exams-page.vue'),
-				meta: {
-					layout: 'default',
-				},
-			},
-			{
 				name: 'default-community',
 				path: 'community',
 				component: () => import('@/pages/community/community-page.vue'),

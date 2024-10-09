@@ -115,7 +115,6 @@ export const useClassroom = defineStore('classroom-store', () => {
 
 	async function getSingleClassroom(classRoomOneId: string, students: number = 0) {
 		try {
-
 			const response = await teacherInstance.get(
 				`/get-single-classroom?students=${students}&classroomOneId=${classRoomOneId}`
 			)
