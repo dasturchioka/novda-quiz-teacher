@@ -23,11 +23,15 @@ import CardDescription from '@/components/ui/card/CardDescription.vue'
 import askBeforeAction from '@/components/app/ask-before-action.vue'
 import { useExams } from '@/modules/exams/store'
 import CreateExam from '@/modules/exams/create-exam.vue'
+import { useLoading } from '@/stores/loading'
+import Loading from '@/components/app/loading.vue'
 
+const loadingStore = useLoading()
 const examStore = useExams()
 const route = useRoute()
 const classroomStore = useClassroom()
 
+const { loading } = storeToRefs(loadingStore)
 const { singleClassroom, singleClassroomsStudents } = storeToRefs(classroomStore)
 
 onMounted(async () => {
@@ -81,7 +85,10 @@ const exportStudents = async () => {
 
 <template>
 	<div class="min-h-screen font-manrope">
-		<div v-if="singleClassroom" class="max-w-7xl mx-auto space-y-6">
+		<div v-if="!singleClassroom && loading">
+			<Loading />
+		</div>
+		<div v-else-if="singleClassroom" class="max-w-7xl mx-auto space-y-6">
 			<header class="bg-blue-500 text-white p-6 rounded-lg shadow-md">
 				<h1 class="text-3xl font-bold font-noto">Sinfxona: {{ singleClassroom.name }}</h1>
 				<p class="">{{ singleClassroom.oneId }}</p>
@@ -217,5 +224,6 @@ const exportStudents = async () => {
 				</CardContent>
 			</Card>
 		</div>
+		<div v-else>Ma'lumot topilmadi</div>
 	</div>
 </template>

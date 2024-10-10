@@ -5,9 +5,14 @@ import SinglePackage from '@/modules/packages/single-package.vue'
 import { usePackage } from '@/modules/packages/store'
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
+import { useLoading } from '@/stores/loading'
+import Loading from '@/components/app/loading.vue'
 
+const loadingStore = useLoading()
 const packageStore = usePackage()
+
 const { packages } = storeToRefs(packageStore)
+const { loading } = storeToRefs(loadingStore)
 
 onMounted(async () => {
 	await packageStore.getAllPackages()
@@ -17,6 +22,9 @@ onMounted(async () => {
 <template>
 	<div class="packages-page">
 		<Header>Paketlar</Header>
+		<div v-if="!packages.length && loading">
+			<Loading />
+		</div>
 		<div v-if="packages.length" class="single-packages w-full">
 			<div class="wrapper grid my-6">
 				<SinglePackage v-for="p in packages" :key="p.id" :single-package="p" />

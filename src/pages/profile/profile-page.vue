@@ -3,10 +3,14 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { useProfile } from '@/modules/profile/store'
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
+import { useLoading } from '@/stores/loading'
+import Loading from '@/components/app/loading.vue'
 
+const loadingStore = useLoading()
 const profileStore = useProfile()
 
 const { profile } = storeToRefs(profileStore)
+const { loading } = storeToRefs(loadingStore)
 
 onMounted(async () => {
 	await profileStore.getProfile()
@@ -16,6 +20,9 @@ onMounted(async () => {
 
 <template>
 	<div class="profile page">
+		<div v-if="!profile && loading">
+			<Loading />
+		</div>
 		<div v-if="profile" class="min-h-screen font-manrope">
 			<div class="max-w-7xl mx-auto space-y-6">
 				<header class="bg-blue-500 text-white p-6 rounded-lg shadow-md">
@@ -30,5 +37,6 @@ onMounted(async () => {
 				</Card>
 			</div>
 		</div>
+		<div v-else>Ma'lumot topilmadi</div>
 	</div>
 </template>

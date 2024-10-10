@@ -5,10 +5,14 @@ import SingleClassroom from '@/modules/classrooms/single-classroom.vue'
 import { useClassroom } from '@/modules/classrooms/store'
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
+import { useLoading } from '@/stores/loading'
+import Loading from '@/components/app/loading.vue'
 
+const loadingStore = useLoading()
 const classroomStore = useClassroom()
 
 const { classrooms } = storeToRefs(classroomStore)
+const { loading } = storeToRefs(loadingStore)
 
 onMounted(async () => {
 	await classroomStore.getAllClassrooms()
@@ -18,6 +22,9 @@ onMounted(async () => {
 <template>
 	<div class="classrooms-page">
 		<Header>Sinfxonalar</Header>
+		<div v-if="!classrooms.length && loading">
+			<Loading />
+		</div>
 		<div v-if="classrooms.length" class="single-classroom w-full">
 			<div class="wrapper grid my-6">
 				<SingleClassroom v-for="c in classrooms" :key="c.id" :single-classroom="c" />

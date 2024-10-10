@@ -28,14 +28,6 @@ const routes: RouteRecordRaw[] = [
 				},
 			},
 			{
-				name: 'default-students',
-				path: 'students',
-				component: () => import('@/pages/students/students-page.vue'),
-				meta: {
-					layout: 'default',
-				},
-			},
-			{
 				name: 'default-packages',
 				path: 'packages',
 				component: () => import('@/pages/packages/packages-page.vue'),

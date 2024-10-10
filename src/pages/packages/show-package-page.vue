@@ -10,6 +10,7 @@ import { Download, Globe, Lock, User } from 'lucide-vue-next'
 import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useLoading } from '@/stores/loading'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -23,10 +24,13 @@ import {
 } from '@/components/ui/alert-dialog'
 import Checkbox from '@/components/ui/checkbox/Checkbox.vue'
 import Label from '@/components/ui/label/Label.vue'
+import Loading from '@/components/app/loading.vue'
 
+const loadingStore = useLoading()
 const route = useRoute()
 const packageStore = usePackage()
 
+const { loading } = storeToRefs(loadingStore)
 const { singlePackage, singlePackageQuestions } = storeToRefs(packageStore)
 
 onMounted(async () => {
@@ -46,7 +50,10 @@ const exportQuestions = async () => {
 
 <template>
 	<div class="show-package">
-		<div v-if="singlePackage">
+		<div v-if="!singlePackage && loading">
+			<Loading />
+		</div>
+		<div v-else-if="singlePackage">
 			<div class="top bg-blue-500 text-neutral-50 sm:p-6 p-4 rounded-lg">
 				<h1 class="sm:text-3xl text-xl font-noto font-bold flex items-center">
 					{{ singlePackage.name }}
@@ -114,6 +121,9 @@ const exportQuestions = async () => {
 					<AddQuestions type="long" :package-one-id="String(route.params.oneId)" />
 				</div>
 			</div>
+		</div>
+		<div v-else>
+			Malumot topilmadi
 		</div>
 	</div>
 </template>
