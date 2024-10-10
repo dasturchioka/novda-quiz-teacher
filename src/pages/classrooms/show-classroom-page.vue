@@ -224,6 +224,6 @@ const exportStudents = async () => {
 				</CardContent>
 			</Card>
 		</div>
-		<div v-else>Ma'lumot topilmadi</div>
+		<div v-else-if="!singleClassroom && !loading">Ma'lumot topilmadi</div>
 	</div>
 </template>

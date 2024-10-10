@@ -25,13 +25,13 @@ onMounted(async () => {
 		<div v-if="!classrooms.length && loading">
 			<Loading />
 		</div>
-		<div v-if="classrooms.length" class="single-classroom w-full">
+		<div v-else-if="classrooms.length" class="single-classroom w-full">
 			<div class="wrapper grid my-6">
 				<SingleClassroom v-for="c in classrooms" :key="c.id" :single-classroom="c" />
 				<CreateClassroom as-what="card" />
 			</div>
 		</div>
-		<div v-else class="my-6">
+		<div v-else-if="!classrooms.length && !loading" class="my-6">
 			<h1 class="text-xl font-manrope">Hozircha sizda sinfxonalar mavjud emas</h1>
 			<CreateClassroom as-what="button" class="my-2" />
 		</div>

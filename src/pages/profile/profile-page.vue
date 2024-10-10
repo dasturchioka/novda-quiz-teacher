@@ -23,7 +23,7 @@ onMounted(async () => {
 		<div v-if="!profile && loading">
 			<Loading />
 		</div>
-		<div v-if="profile" class="min-h-screen font-manrope">
+		<div v-else-if="profile" class="min-h-screen font-manrope">
 			<div class="max-w-7xl mx-auto space-y-6">
 				<header class="bg-blue-500 text-white p-6 rounded-lg shadow-md">
 					<h1 class="text-3xl font-bold font-noto">Profil</h1>
@@ -37,6 +37,6 @@ onMounted(async () => {
 				</Card>
 			</div>
 		</div>
-		<div v-else>Ma'lumot topilmadi</div>
+		<div v-else-if="!profile && !loading">Ma'lumot topilmadi</div>
 	</div>
 </template>

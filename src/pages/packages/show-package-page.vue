@@ -122,7 +122,7 @@ const exportQuestions = async () => {
 				</div>
 			</div>
 		</div>
-		<div v-else>
+		<div v-else-if="!singlePackage && !loading">
 			Malumot topilmadi
 		</div>
 	</div>

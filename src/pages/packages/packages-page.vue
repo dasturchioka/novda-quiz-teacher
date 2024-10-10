@@ -31,7 +31,7 @@ onMounted(async () => {
 				<CreatePackage as-what="card" />
 			</div>
 		</div>
-		<div v-else class="my-6">
+		<div v-else-if="!loading" class="my-6">
 			<h1 class="text-xl font-manrope">Hozircha sizda paketlar mavjud emas</h1>
 			<CreatePackage as-what="button" class="my-2" />
 		</div>
