@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Cookie from 'js-cookie'
+import DefaultLayout from "@/layouts/default-layout.vue"
+import AuthLayout from '@/layouts/auth-layout.vue'
 
 // Define routes
 const routes: RouteRecordRaw[] = [
 	{
 		name: 'default-layout',
 		path: '/',
-		component: () => import('@/layouts/default-layout.vue'),
+		component: DefaultLayout,
 		redirect: '/classrooms',
 		beforeEnter: (to, from, next) => {
 			const token = Cookie.get('token')
@@ -78,7 +80,7 @@ const routes: RouteRecordRaw[] = [
 	{
 		name: 'auth-layout',
 		path: '/auth',
-		component: () => import('@/layouts/auth-layout.vue'),
+		component: AuthLayout,
 		beforeEnter: (to, from, next) => {
 			const token = Cookie.get('token')
 			if (!token) {
