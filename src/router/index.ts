@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Cookie from 'js-cookie'
-import DefaultLayout from "@/layouts/default-layout.vue"
+import DefaultLayout from '@/layouts/default-layout.vue'
 import AuthLayout from '@/layouts/auth-layout.vue'
 
 // Define routes
@@ -108,13 +108,9 @@ const router = createRouter({
 	routes,
 })
 
-// Optional: Add global navigation guard (for demonstration purposes)
-router.beforeEach((to, from, next) => {
-	const token = Cookie.get('token')
-	if (to.path !== '/auth' && !token) {
-		next('/auth') // Redirect to auth if trying to access a protected route
-	} else {
-		next() // Proceed
+router.onError((error, to) => {
+	if (error.message.includes('Failed to fetch dynamically imported module')) {
+		window.location = to.fullPath as any
 	}
 })
 
