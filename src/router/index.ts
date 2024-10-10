@@ -108,6 +108,7 @@ const router = createRouter({
 	routes,
 })
 
+// reroute when the error happens
 router.onError((error, to) => {
 	if (error.message.includes('Failed to fetch dynamically imported module')) {
 		window.location = to.fullPath as any
