@@ -64,7 +64,6 @@ export const usePackage = defineStore('package-store', () => {
 			}
 
 			if (response.data.status === 'bad') {
-				toast(response.data.msg)
 				return
 			}
 
