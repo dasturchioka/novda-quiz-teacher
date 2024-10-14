@@ -3,11 +3,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { EyeIcon, EyeOffIcon } from 'lucide-vue-next'
+import { EyeIcon, EyeOffIcon, KeyRound } from 'lucide-vue-next'
 import { ref } from 'vue'
 import { useAuth } from '@/stores/auth'
 import { Teacher } from '@/models'
+import { useOneId } from '@/composables/useOneId'
 
+const { generateRandomOneId } = useOneId()
 const authStore = useAuth()
 
 const showPassword = ref(false)
@@ -22,6 +24,15 @@ const teacherDetails = ref<Teacher>({
 	oneId: '',
 	password: '',
 })
+
+const generateOneId = async () => {
+	const { value } = await generateRandomOneId()
+
+	teacherDetails.value.oneId = value
+
+	console.log(teacherDetails.value.oneId)
+	console.log(value)
+}
 </script>
 
 <template>
@@ -42,6 +53,19 @@ const teacherDetails = ref<Teacher>({
 								placeholder="Faqat lotin harflarida"
 								required
 							/>
+						</div>
+						<div class="space-y-2 relative">
+							<Label for="register-oneId">OneId (login)</Label>
+							<Input
+								v-model:modelValue="teacherDetails.oneId"
+								readonly
+								id="register-oneId"
+								placeholder="Kalitni bosing"
+								required
+							/>
+							<button class="absolute p-2 right-2 top-7" type="button" @click="generateOneId">
+								<KeyRound class="size-4" />
+							</button>
 						</div>
 						<div class="space-y-2">
 							<Label for="register-password">Parol</Label>
