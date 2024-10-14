@@ -19,7 +19,7 @@ export const usePackage = defineStore('package-store', () => {
 	const singlePackage = ref<Package>()
 
 	async function createPackage(name: string) {
-		try {
+		try {	
 			if (!name) {
 				toast('Nomini kiriting')
 				return

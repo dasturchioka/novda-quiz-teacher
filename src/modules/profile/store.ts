@@ -15,7 +15,7 @@ export const useProfile = defineStore('profile-store', () => {
 			const response = await teacherInstance.get(`/get-profile/${teacherOneId}`)
 
 			if (!response) {
-				toast("Server yoki internet bilan aloqa yo'q , boshqatdan urinib ko'ring")
+				toast("Server yoki internet bilan aloqa yo'q, boshqatdan urinib ko'ring")
 				return
 			}
 
