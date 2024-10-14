@@ -38,6 +38,7 @@ export interface Classroom {
 	teacher: Teacher
 	students: Student[]
 	teacherId: string
+	exams: Exam[]
 	[key: string]: any
 }
 
@@ -60,6 +61,7 @@ export interface Score {
 	examId: string
 	questionsNumber: number
 	studentId: string
+	percentage: string
 	[key: string]: any
 }
 
@@ -75,7 +77,7 @@ export interface Exam {
 	classromId: string
 	active: boolean
 	teacherId: string
-	score: Score[]
+	scores: Score[]
 	[key: string]: any
 }
 

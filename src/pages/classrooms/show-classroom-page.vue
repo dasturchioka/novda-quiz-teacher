@@ -36,6 +36,7 @@ const { singleClassroom, singleClassroomsStudents } = storeToRefs(classroomStore
 
 onMounted(async () => {
 	await classroomStore.getSingleClassroom(route.params.oneId as string, 1)
+	console.log(singleClassroom.value)
 })
 
 const calculateSize = async (data: any) => {
@@ -65,21 +66,42 @@ const exportStudents = async () => {
 			'Oxirgi natija': s.scores.length ? s.scores[s.scores.length - 1] : 'Mavjud emas',
 		}
 	})
-	// Create a new worksheet from the JSON data
 	const worksheet = XLSX.utils.json_to_sheet(newStudentsFormat)
 
-	// Calculate the column widths
 	const columnWidths = await calculateSize(newStudentsFormat)
 
-	// Assign the column widths to the worksheet
 	worksheet['!cols'] = columnWidths
 
-	// Create a new workbook and append the worksheet
 	const workbook = XLSX.utils.book_new()
 	XLSX.utils.book_append_sheet(workbook, worksheet, `Talabalar`)
 
-	// Generate the Excel file and trigger the download
 	XLSX.writeFile(workbook, `${singleClassroom.value?.name}_talabalari.xlsx`)
+}
+
+const exportScores = async (examOneId: string) => {
+	const existExam = singleClassroom.value.exams.find(e => e.oneId === examOneId)
+
+	const newScoresFormat = existExam.scores.map((s, index) => {
+		return {
+			'№': index + 1,
+			Talaba: `${s.student.fullname}, ${s.student.oneId}`,
+			Imtihon: existExam.name,
+			'Savollar soni': s.questionsNumber,
+			"To'g'ri javoblar soni": s.correctAnswers,
+			Foiz: `${s.percentage}%`,
+			'Natija id': s.id,
+		}
+	})
+	const worksheet = XLSX.utils.json_to_sheet(newScoresFormat)
+
+	const columnWidths = await calculateSize(newScoresFormat)
+
+	worksheet['!cols'] = columnWidths
+
+	const workbook = XLSX.utils.book_new()
+	XLSX.utils.book_append_sheet(workbook, worksheet, `Natijalar`)
+
+	XLSX.writeFile(workbook, `${existExam.name}_${singleClassroom.value.name}_natijalari.xlsx`)
 }
 </script>
 
@@ -216,7 +238,9 @@ const exportStudents = async () => {
 											<Button variant="destructive"> <Trash class="size-5" /> </Button>
 										</template>
 									</askBeforeAction>
-									<Button><Download class="size-5 mr-2" /> Natijalarni olish </Button>
+									<Button @click="exportScores(exam.oneId)">
+										<Download class="size-5 mr-2" /> Natijalarni olish
+									</Button>
 								</div>
 							</div>
 						</li>
