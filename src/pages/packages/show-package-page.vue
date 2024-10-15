@@ -80,7 +80,7 @@ const exportQuestions = async () => {
 			<div class="questions">
 				<div
 					v-if="
-						singlePackageQuestions.questions &&
+						singlePackageQuestions.questions.length &&
 						singlePackageQuestions.packageOneId === singlePackage.oneId
 					"
 					class="flex flex-col justify-center my-6 space-y-4"
@@ -91,7 +91,11 @@ const exportQuestions = async () => {
 					</div>
 					<AlertDialog>
 						<AlertDialogTrigger as-child>
-							<Button type="button" class="w-auto self-end">
+							<Button
+								v-if="singlePackageQuestions.questions.length"
+								type="button"
+								class="w-auto self-end"
+							>
 								<Download class="size-5 mr-2" /> Savollarni yuklash</Button
 							>
 						</AlertDialogTrigger>
@@ -122,8 +126,6 @@ const exportQuestions = async () => {
 				</div>
 			</div>
 		</div>
-		<div v-else-if="!singlePackage && !loading">
-			Malumot topilmadi
-		</div>
+		<div v-else-if="!singlePackage && !loading">Malumot topilmadi</div>
 	</div>
 </template>
