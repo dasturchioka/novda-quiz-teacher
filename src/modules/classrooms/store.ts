@@ -177,6 +177,47 @@ export const useClassroom = defineStore('classroom-store', () => {
 		}
 	}
 
+	async function deleteClassroom(payload: { classroomOneId: string }) {
+		try {
+			const teacherOneId = Cookies.get('oneId')
+			const response = await teacherInstance.delete(
+				`/delete-classroom/${payload.classroomOneId}/${teacherOneId}`
+			)
+
+			if (!response) {
+				toast('Server yoki internet bilan aloqa mavjud emas')
+				return
+			}
+
+			const data = await response.data
+
+			if (data.status === 'bad') {
+				toast(data.msg)
+				return
+			}
+
+			classrooms.value = classrooms.value.filter(
+				classroom => classroom.oneId !== payload.classroomOneId
+			)
+			if (singleClassroom.value && singleClassroom.value.oneId === payload.classroomOneId) {
+				singleClassroom.value = null
+			}
+			if (singleClassroomsStudents.value.classRoomOneId === payload.classroomOneId) {
+				singleClassroomsStudents.value = {
+					classRoomOneId: '',
+					students: [],
+				}
+			}
+			toast(data.msg)
+		} catch (error: any) {
+			toast(
+				error.message ||
+					error.response.data.msg ||
+					"Qandaydir xatolik yuzaga keldi, boshqatdan urinib ko'ring"
+			)
+		}
+	}
+
 	return {
 		classrooms,
 		createClassroom,
@@ -186,5 +227,6 @@ export const useClassroom = defineStore('classroom-store', () => {
 		editClassroom,
 		getSingleClassroom,
 		removeStudentFromClassroom,
+		deleteClassroom
 	}
 })

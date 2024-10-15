@@ -55,7 +55,9 @@ const { copy, copied } = useClipboard({ source: singleClassroom.value.oneId })
 					<button @click="toggleEditingClassroom(true)">
 						<Pencil class="size-4" />
 					</button>
-					<DeleteItem>
+					<DeleteItem
+						@do:action="classroomStore.deleteClassroom({ classroomOneId: singleClassroom.oneId })"
+					>
 						<template #trigger>
 							<button>
 								<Trash class="size-4 text-red-500" />
