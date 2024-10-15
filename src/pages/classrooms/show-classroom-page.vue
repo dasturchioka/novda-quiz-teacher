@@ -244,13 +244,16 @@ const exportScores = async (examOneId: string) => {
 													To'liq natijalarni imtihonni tugatgandan keyin ko'rsangiz bo'ladi
 												</DialogDescription>
 											</DialogHeader>
-											<div class="flex flex-col gap-2">
+											<div v-if="exam.scores && exam.scores.length" class="flex flex-col gap-2">
 												<p class="font-bold text-lg">{{ exam.scores.length }} ta talaba</p>
 												<div class="flex gap-2">
 													<p v-for="(student, index) in exam.scores" :key="index">
 														{{ student.student.fullname }},
 													</p>
 												</div>
+											</div>
+											<div v-else class="flex flex-col gap-2">
+												<p class="font-bold text-lg">Hali hech kim yakunlamadi</p>
 											</div>
 											<DialogClose as-child>
 												<Button>Yopish</Button>
