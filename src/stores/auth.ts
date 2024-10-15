@@ -85,10 +85,10 @@ export const useAuth = defineStore('auth-store', () => {
 
 			if (response.data.status === 'bad') {
 				toast(response.data.msg)
-				await router.push('/auth')
 				Cookies.remove('token')
 				Cookies.remove('oneId')
 				Cookies.remove('beta-component')
+				await router.push('/auth')
 				return
 			}
 
