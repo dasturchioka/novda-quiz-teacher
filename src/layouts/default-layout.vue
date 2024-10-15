@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { MenuIcon, XIcon, Boxes, ListCheck, Globe, X, UserRound } from 'lucide-vue-next'
+import { MenuIcon, XIcon, Boxes, ListCheck, Globe, X, UserRound, LogOut } from 'lucide-vue-next'
 import { useAuth } from '@/stores/auth'
 import Cookies from 'js-cookie'
+import router from '@/router'
+import AskBeforeAction from '@/components/app/ask-before-action.vue'
+import Button from '@/components/ui/button/Button.vue'
 
 const visibilityBetaComponent = ref(Cookies.get('beta-component'))
 
@@ -37,6 +40,12 @@ const toggleSidebar = () => {
 const closeBetaComponent = () => {
 	Cookies.set('beta-component', 'false')
 	visibilityBetaComponent.value = Cookies.get('beta-component')
+}
+
+const logout = async () => {
+	Cookies.remove('oneId')
+	Cookies.remove('token')
+	await router.push('/auth')
 }
 
 onMounted(() => {
@@ -94,18 +103,31 @@ onUnmounted(() => {
 						</RouterLink>
 					</nav>
 				</div>
-				<div
-					v-if="visibilityBetaComponent === 'true'"
-					class="beta bg-blue-500 text-neutral-50 mx-2 rounded-md p-4 justify-self-end mb-4"
-				>
-					<h1 class="text-xl flex items-center font-bold font-manrope mb-4">
-						Sayt beta holatda!
-						<button @click="closeBetaComponent"><X class="size-5 ml-2" /></button>
-					</h1>
-					<p class="text-sm font-noto">
-						Saytga yangi imkoniyat va qulayliklar qo'shiladi va texnik muammolar tez orada hal
-						qilinadi
-					</p>
+				<div class="flex flex-col px-2">
+					<AskBeforeAction
+						title="Akkauntingizdan chiqmoqchimisiz?"
+						description="Logn va parolingizni eslab qoling"
+						@do:action="logout"
+					>
+						<template #trigger>
+							<Button class="w-full mb-2" variant="destructive"
+								><LogOut class="size-5 mr-2" /> Chiqish</Button
+							>
+						</template>
+					</AskBeforeAction>
+					<div
+						v-if="visibilityBetaComponent === 'true'"
+						class="beta bg-blue-500 text-neutral-50 rounded-md p-4 justify-self-end mb-4"
+					>
+						<h1 class="text-xl flex items-center font-bold font-manrope mb-4">
+							Sayt beta holatda!
+							<button @click="closeBetaComponent"><X class="size-5 ml-2" /></button>
+						</h1>
+						<p class="text-sm font-noto">
+							Saytga yangi imkoniyat va qulayliklar qo'shiladi va texnik muammolar tez orada hal
+							qilinadi
+						</p>
+					</div>
 				</div>
 			</div>
 		</aside>
