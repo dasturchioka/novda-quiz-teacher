@@ -147,6 +147,7 @@ const exportScores = async (examOneId: string) => {
 											<TableHead class="whitespace-nowrap">Parol</TableHead>
 											<TableHead class="whitespace-nowrap">Sinfxonalar</TableHead>
 											<TableHead class="whitespace-nowrap">Oxirgi natija</TableHead>
+											<TableHead class="whitespace-nowrap">Amallar</TableHead>
 										</TableRow>
 									</TableHeader>
 									<TableBody>
@@ -173,8 +174,28 @@ const exportScores = async (examOneId: string) => {
 												</Badge>
 											</TableCell>
 											<TableCell class="whitespace-nowrap">{{
-												student.lastScore ?? "Yo'q"
+												student.scores && student.scores.length
+													? student.scores[student.scores.length - 1].percentage + '%'
+													: "Yo'q"
 											}}</TableCell>
+											<TableCell class="whitespace-nowrap">
+												<askBeforeAction
+													@do:action="
+														classroomStore.removeStudentFromClassroom({
+															classroomOneId: singleClassroom.oneId,
+															studentOneId: student.oneId,
+														})
+													"
+													title="Talabani chiqarib yuboramizmi?"
+													:description="`${student.fullname}ni sinfdan chiqarib yubormoqchisiz`"
+												>
+													<template #trigger>
+														<Button variant="destructive" size="icon" class="size-8"
+															><Trash class="size-4"
+														/></Button>
+													</template>
+												</askBeforeAction>
+											</TableCell>
 										</TableRow>
 									</TableBody>
 								</Table>

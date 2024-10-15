@@ -142,6 +142,41 @@ export const useClassroom = defineStore('classroom-store', () => {
 		}
 	}
 
+	async function removeStudentFromClassroom(payload: {
+		classroomOneId: string
+		studentOneId: string
+	}) {
+		try {
+			const response = await teacherInstance.put(`/remove-student`, {
+				classroomOneId: payload.classroomOneId,
+				studentOneId: payload.studentOneId,
+			})
+
+			if (!response) {
+				toast('Server yoki internet bilan aloqa mavjud emas')
+				return
+			}
+
+			const data = await response.data
+
+			if (data.status === 'bad') {
+				toast(data.msg)
+				return
+			}
+
+			singleClassroomsStudents.value.students = singleClassroomsStudents.value.students.filter(
+				student => student.oneId !== payload.studentOneId
+			)
+			toast('Talaba sinfdan muvaffaqiyatli olib tashlandi')
+		} catch (error: any) {
+			toast(
+				error.message ||
+					error.response.data.msg ||
+					"Qandaydir xatolik yuzaga keldi, boshqatdan urinib ko'ring"
+			)
+		}
+	}
+
 	return {
 		classrooms,
 		createClassroom,
@@ -150,5 +185,6 @@ export const useClassroom = defineStore('classroom-store', () => {
 		getAllClassrooms,
 		editClassroom,
 		getSingleClassroom,
+		removeStudentFromClassroom,
 	}
 })
