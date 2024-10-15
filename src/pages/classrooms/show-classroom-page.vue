@@ -25,6 +25,15 @@ import { useExams } from '@/modules/exams/store'
 import CreateExam from '@/modules/exams/create-exam.vue'
 import { useLoading } from '@/stores/loading'
 import Loading from '@/components/app/loading.vue'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '@/components/ui/dialog'
+import DialogClose from '@/components/ui/dialog/DialogClose.vue'
 
 const loadingStore = useLoading()
 const examStore = useExams()
@@ -219,7 +228,36 @@ const exportScores = async (examOneId: string) => {
 									<p class="text-2xl font-bold text-indigo-600">{{ exam.studentsCount }}</p>
 								</div>
 							</div>
-							<div class="mt-4 flex justify-end">
+							<div class="mt-4 flex space-x-2 justify-end">
+								<div class="scores flex items-center space-x-4">
+									<p v-if="exam.active" class="text-sm font-semibold">
+										Nechta kishi imtihonni yakunladi?
+									</p>
+									<Dialog>
+										<DialogTrigger as-child>
+											<Button v-if="exam.active">Natijalar</Button>
+										</DialogTrigger>
+										<DialogContent>
+											<DialogHeader>
+												<DialogTitle>Imtihonni yakunlaganlar</DialogTitle>
+												<DialogDescription>
+													To'liq natijalarni imtihonni tugatgandan keyin ko'rsangiz bo'ladi
+												</DialogDescription>
+											</DialogHeader>
+											<div class="flex flex-col gap-2">
+												<p class="font-bold text-lg">{{ exam.scores.length }} ta talaba</p>
+												<div class="flex gap-2">
+													<p v-for="(student, index) in exam.scores" :key="index">
+														{{ student.student.fullname }},
+													</p>
+												</div>
+											</div>
+											<DialogClose as-child>
+												<Button>Yopish</Button>
+											</DialogClose>
+										</DialogContent>
+									</Dialog>
+								</div>
 								<div v-if="exam.active">
 									<askBeforeAction
 										description="Siz ushbu imtihonni tugatmoqchisiz, imtihonni tugatmagan talabalarning natijalari saqlanmaydi"
