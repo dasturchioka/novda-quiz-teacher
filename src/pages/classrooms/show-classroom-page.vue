@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import * as XLSX from 'xlsx'
-import { onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import {
 	Table,
 	TableBody,
@@ -34,6 +34,7 @@ import {
 	DialogTrigger,
 } from '@/components/ui/dialog'
 import DialogClose from '@/components/ui/dialog/DialogClose.vue'
+import Input from '@/components/ui/input/Input.vue'
 
 const loadingStore = useLoading()
 const examStore = useExams()
@@ -42,6 +43,17 @@ const classroomStore = useClassroom()
 
 const { loading } = storeToRefs(loadingStore)
 const { singleClassroom, singleClassroomsStudents } = storeToRefs(classroomStore)
+
+const searchStudentsTerm = ref('')
+
+const filteredStudents = computed(() => {
+	return singleClassroomsStudents.value.students.filter(s => {
+		return (
+			s.oneId.toLowerCase().includes(searchStudentsTerm.value.toLowerCase()) ||
+			s.fullname.toLowerCase().includes(searchStudentsTerm.value.toLowerCase())
+		)
+	})
+})
 
 onMounted(async () => {
 	await classroomStore.getSingleClassroom(route.params.oneId as string, 1)
@@ -126,13 +138,18 @@ const exportScores = async (examOneId: string) => {
 			</header>
 
 			<Card class="w-full">
-				<CardHeader>
-					<CardTitle>Talabalar</CardTitle>
-					<CardDescription>{{
-						singleClassroomsStudents.students && singleClassroomsStudents.students.length
-							? `${singleClassroomsStudents.students.length} ta talaba`
-							: ''
-					}}</CardDescription>
+				<CardHeader class="flex flex-row justify-between items-center">
+					<div class="titles">
+						<CardTitle>Talabalar</CardTitle>
+						<CardDescription>{{
+							singleClassroomsStudents.students && singleClassroomsStudents.students.length
+								? `${singleClassroomsStudents.students.length} ta talaba`
+								: ''
+						}}</CardDescription>
+					</div>
+					<div class="search w-[60%]">
+						<Input v-model="searchStudentsTerm" placeholder="Talabalarni qidirish..." autofocus />
+					</div>
 				</CardHeader>
 				<CardContent>
 					<div v-if="singleClassroomsStudents.students.length" class="overflow-x-auto">
@@ -152,7 +169,7 @@ const exportScores = async (examOneId: string) => {
 									</TableHeader>
 									<TableBody>
 										<TableRow
-											v-for="(student, index) in singleClassroomsStudents.students"
+											v-for="(student, index) in filteredStudents"
 											:key="index"
 										>
 											<TableCell class="whitespace-nowrap"

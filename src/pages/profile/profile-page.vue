@@ -2,7 +2,7 @@
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useProfile } from '@/modules/profile/store'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useLoading } from '@/stores/loading'
 import Loading from '@/components/app/loading.vue'
 

@@ -4,16 +4,17 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { EyeIcon, EyeOffIcon, KeyRound } from 'lucide-vue-next'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useAuth } from '@/stores/auth'
 import { Teacher } from '@/models'
 import { useOneId } from '@/composables/useOneId'
-import Logo from "@/assets/logo.svg"
+import Logo from '@/assets/logo.svg'
 
 const { generateRandomOneId } = useOneId()
 const authStore = useAuth()
 
 const showPassword = ref(false)
+const activeTab = ref<'register' | 'login'>('register')
 
 const togglePassword = () => {
 	showPassword.value = !showPassword.value
@@ -34,16 +35,40 @@ const generateOneId = async () => {
 	console.log(teacherDetails.value.oneId)
 	console.log(value)
 }
+
+const removeOneId = async () => {
+	teacherDetails.value.oneId = ''
+}
+
+async function switchTabs(tab: 'register' | 'login') {
+	activeTab.value = tab
+}
+
+watch(
+	() => activeTab.value,
+	async val => {
+		if (val === 'register') {
+			await generateOneId()
+		} else {
+			await removeOneId()
+		}
+
+		console.log(val)
+	},
+	{
+		immediate: true,
+	}
+)
 </script>
 
 <template>
 	<div class="register-page h-screen flex flex-col justify-center items-center">
 		<div class="w-full flex flex-col items-center max-w-md mx-auto p-6">
-			<img :src="Logo" class="size-10 sm:mb-6 mb-4">
-			<Tabs defaultValue="register" class="w-full">
+			<img :src="Logo" class="size-10 sm:mb-6 mb-4" />
+			<Tabs :model-value="activeTab" defaultValue="register" class="w-full">
 				<TabsList class="grid w-full grid-cols-2">
-					<TabsTrigger value="register">Ro'yxatdan o'tish</TabsTrigger>
-					<TabsTrigger value="login">Login</TabsTrigger>
+					<TabsTrigger @click="switchTabs('register')" value="register">Ro'yxatdan o'tish</TabsTrigger>
+					<TabsTrigger @click="switchTabs('login')" value="login">Login</TabsTrigger>
 				</TabsList>
 				<TabsContent value="register">
 					<form @submit.prevent="authStore.register(teacherDetails)" class="space-y-4">
