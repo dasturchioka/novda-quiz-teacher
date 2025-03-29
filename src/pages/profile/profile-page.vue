@@ -1,0 +1,42 @@
+<script lang="ts" setup>
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useProfile } from '@/modules/profile/store'
+import { storeToRefs } from 'pinia'
+import { onMounted, watch } from 'vue'
+import { useLoading } from '@/stores/loading'
+import Loading from '@/components/app/loading.vue'
+
+const loadingStore = useLoading()
+const profileStore = useProfile()
+
+const { profile } = storeToRefs(profileStore)
+const { loading } = storeToRefs(loadingStore)
+
+onMounted(async () => {
+	await profileStore.getProfile()
+	console.log(profile.value)
+})
+</script>
+
+<template>
+	<div class="profile page">
+		<div v-if="!profile && loading">
+			<Loading />
+		</div>
+		<div v-else-if="profile" class="min-h-screen font-manrope">
+			<div class="max-w-7xl mx-auto space-y-6">
+				<header class="bg-blue-500 text-white p-6 rounded-lg shadow-md">
+					<h1 class="text-3xl font-bold font-noto">Profil</h1>
+				</header>
+
+				<Card class="w-full">
+					<CardHeader>
+						<CardTitle>{{ profile.fullname }}</CardTitle>
+						<CardDescription>{{ profile.oneId }}</CardDescription>
+					</CardHeader>
+				</Card>
+			</div>
+		</div>
+		<div v-else-if="!profile && !loading">Ma'lumot topilmadi</div>
+	</div>
+</template>

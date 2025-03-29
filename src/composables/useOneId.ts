@@ -1,11 +1,13 @@
 import { computed } from 'vue'
 
 export const useOneId = () => {
-	const PREFIX = 'PK'
+	const PREFIX = 'TE'
 
-	const randomOneId = computed(() => {
-		return PREFIX + Math.floor(Math.random() * 999999)
-	})
+	const generateRandomOneId = async () => {
+		return computed(() => {
+			return PREFIX + Math.floor(Math.random() * 9999999)
+		})
+	}
 
-	return { randomOneId }
+	return { generateRandomOneId }
 }
